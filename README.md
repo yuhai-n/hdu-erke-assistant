@@ -14,4 +14,4 @@
 ### 4. 严苛环境下的前端健壮性
 专门针对微信内置浏览器、隐私模式等严苛环境进行了兼容性重构。采用纯 DOM 控制替代传统路由跳转以绕过微信沙箱限制；针对本地存储被禁用的极端情况，实现了 `localStorage -> sessionStorage -> 内存变量` 的三级降级兜底，**保证产品在任何环境下都不白屏、不崩溃**。
 
-**在线预览链接：https://yuhai-n.github.io/front-end-practise/**
+**在线预览链接：https://yuhai-n.github.io/hdu-erke-assistant/**
