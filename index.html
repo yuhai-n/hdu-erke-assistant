@@ -1,0 +1,3904 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>二课答疑 · 办事卡</title>
+<style>
+/* ============ 单文件版：校园蓝绿主题，移动端 375px 优先 ============ */
+:root{
+  --motion-dur:200ms; --motion-dur-fast:150ms; --motion-ease:ease-out;
+  --bg:#f2f7f8; --card:#fff; --ink:#17323b; --sub:#6b8089; --line:#e3ecee;
+  --brand:#0e8f8b; --brand-2:#2f74e0; --brand-ink:#0b6a72;
+  --brand-soft:#eaf9f6; --brand-soft-2:#eff5ff;
+  --grad:linear-gradient(135deg,#12a19a 0%,#2f74e0 100%);
+  --shadow-sm:0 2px 10px rgba(14,80,95,.06);
+  --shadow:0 8px 26px rgba(14,80,95,.09);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);overflow-x:hidden;overflow-wrap:anywhere;
+  font:15px/1.7 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+body::before{content:"";position:fixed;left:0;right:0;top:0;height:320px;pointer-events:none;z-index:0;
+  background:radial-gradient(120% 100% at 12% 0%,rgba(18,161,154,.14),transparent 70%),
+             radial-gradient(110% 100% at 95% 0%,rgba(47,116,224,.12),transparent 70%)}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit}
+[hidden]{display:none!important}
+.app{position:relative;z-index:1;width:100%;max-width:420px;min-width:0;margin:0 auto;
+  padding:0 12px calc(92px + env(safe-area-inset-bottom))}
+
+/* 顶栏 */
+.topbar{display:flex;align-items:center;justify-content:space-between;min-width:0;padding:14px 4px 10px}
+.brand{font-size:17px;font-weight:750;letter-spacing:.02em;color:#0b4f58;background:none;border:0;padding:0;cursor:pointer;text-align:left;font-family:inherit}
+.brand span{margin-left:6px;font-size:11px;font-weight:700;color:#fff;background:var(--grad);border-radius:7px;padding:3px 7px}
+.topbar__link{font-size:13px;color:var(--sub);padding:8px;border-radius:10px;min-height:44px;display:inline-flex;align-items:center;background:none;border:0;cursor:pointer}
+
+/* 通用视图 */
+.view{min-width:0;padding-top:6px}
+.view__title{margin:8px 4px 14px;font-size:19px;font-weight:750;color:#123840}
+.view-head{padding:2px 0 12px}
+.back{display:inline-flex;align-items:center;min-height:44px;font-size:14px;color:var(--sub);padding:6px 8px;border-radius:10px;background:none;border:0;cursor:pointer}
+
+/* 首屏 */
+.hero{position:relative;overflow:hidden;margin:8px 0 18px;padding:22px 18px 20px;border-radius:18px;
+  background:linear-gradient(135deg,#fff 0%,#f4fbfa 58%,#f1f6ff 100%);
+  border:1px solid #e6f0f0;box-shadow:var(--shadow-sm)}
+.hero::before{content:"";position:absolute;left:0;top:0;width:100%;height:4px;background:var(--grad)}
+.hero__title{margin:0;font-size:23px;line-height:1.45;font-weight:750;letter-spacing:-.01em;color:#123840}
+.hero__sub{margin:10px 0 0;font-size:13px;font-weight:600;letter-spacing:.02em;color:var(--brand-ink)}
+.search{display:flex;gap:8px;min-width:0}
+.search__input{flex:1;min-width:0;height:46px;padding:0 14px;border:1px solid #dce8e9;border-radius:14px;
+  background:#fff;color:var(--ink);outline:none;box-shadow:var(--shadow-sm)}
+.search__input:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(14,143,139,.14)}
+.btn{flex:0 0 auto;height:46px;padding:0 18px;border:0;border-radius:14px;font-weight:700;cursor:pointer}
+.btn--primary{background:var(--grad);color:#fff;box-shadow:0 4px 12px rgba(20,120,160,.22)}
+/* 分类关键词引导：搜索栏下方的主引导区 */
+.guide{margin-top:20px;min-width:0}
+.guide__title{margin:0 4px 12px;font-size:13px;font-weight:700;color:var(--brand-ink);letter-spacing:.03em;
+  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.guide__title span{margin-left:auto;font-size:12px;font-weight:500;color:#5b7078;letter-spacing:0}
+/* 分类 tab 横向滚动：容器自身滚动，不撑破 375px 页面 */
+.guide__tabs{display:flex;gap:7px;min-width:0;max-width:100%;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;padding:2px 4px 11px;scrollbar-width:none}
+.guide__tabs::-webkit-scrollbar{display:none}
+.guide-tab{flex:0 0 auto;min-height:36px;padding:7px 13px;border:1px solid #d9eaea;border-radius:999px;
+  background:rgba(255,255,255,.88);color:#40656d;font-size:13px;font-weight:600;white-space:nowrap;
+  cursor:pointer;touch-action:manipulation}
+.guide-tab small{font-weight:500;opacity:.72;margin-left:4px}
+.guide-tab.is-active{background:var(--grad);border-color:transparent;color:#fff;
+  box-shadow:0 4px 12px rgba(20,120,160,.2)}
+.guide-tab.is-pressed{transform:scale(.96)}
+.guide-group{margin-bottom:2px;min-width:0}
+.guide-group__name{margin:0 4px 6px;font-size:12px;font-weight:700;color:var(--sub);
+  display:flex;align-items:center;gap:6px}
+.guide-group__name::before{content:"";flex:0 0 3px;width:3px;height:11px;border-radius:2px;background:var(--grad)}
+.guide-group__row{display:flex;flex-wrap:wrap;gap:6px;min-width:0}
+.kw{min-width:0;max-width:100%;min-height:36px;padding:6px 11px;border:1px solid #d9eaea;border-radius:10px;
+  background:rgba(255,255,255,.9);color:#2b5a61;font-size:13px;line-height:1.4;text-align:left;
+  cursor:pointer;touch-action:manipulation;word-break:break-all}
+.kw.is-pressed{transform:scale(.96)}
+/* 浏览全部主题：原生 details，无入场动效，天然支持减少动效偏好 */
+.browse{margin-top:18px;min-width:0;border:1px solid var(--line);border-radius:16px;
+  background:rgba(255,255,255,.66);box-shadow:var(--shadow-sm);overflow:hidden}
+.browse__summary{display:flex;align-items:center;gap:8px;min-height:46px;padding:12px 16px;
+  font-size:14px;font-weight:700;color:var(--brand-ink);cursor:pointer;list-style:none}
+.browse__summary::-webkit-details-marker{display:none}
+.browse__summary::before{content:"＋";font-size:16px;color:var(--brand)}
+.browse[open] .browse__summary::before{content:"－"}
+.browse__summary span{margin-left:auto;font-size:12px;font-weight:500;color:var(--sub)}
+.browse__groups{padding:0 14px 14px;min-width:0}
+.browse__group{margin-top:14px;min-width:0}
+.browse__cat{margin:0 0 8px 4px;font-size:12px;font-weight:700;color:var(--sub)}
+.browse .chips{gap:6px}
+.browse .chip{min-height:38px;padding:7px 12px;font-size:13px}
+
+.quick{margin-top:16px}
+.quick__title{margin:0 4px 10px;font-size:13px;font-weight:700;color:var(--sub);letter-spacing:.03em}
+.chips{display:flex;flex-wrap:wrap;gap:8px;min-width:0}
+.chip{position:relative;overflow:hidden;min-width:0;max-width:100%;min-height:44px;
+  padding:9px 14px;border:1px solid var(--line);border-radius:999px;background:#fff;color:#33555e;
+  font-size:14px;text-align:left;cursor:pointer;touch-action:manipulation;box-shadow:var(--shadow-sm)}
+.chip::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,#d7f2ee,#dfeaff);opacity:0}
+.chip > span{position:relative;display:inline-block}
+.chip.is-active::before{opacity:1}
+.chip.is-active{color:#0b6a72;border-color:#a9ddd7;box-shadow:0 4px 12px rgba(14,143,139,.14)}
+
+/* 状态：空 / 提示 */
+.state,.app-state{min-width:0;margin-top:20px}
+.state__box,.notice,.loading-box{min-width:0;background:#fff;border:1px solid var(--line);
+  border-radius:16px;padding:18px 16px;box-shadow:var(--shadow-sm)}
+.state__title{margin:0 0 6px;font-size:15px;font-weight:700;color:#123840}
+.state__desc{margin:0 0 14px;font-size:13px;color:var(--sub)}
+.state__chips{margin-top:4px}
+.notice{border-color:#fecaca;color:#991b1b}
+.notice__text{margin:0;font-size:14px}
+.loading-box{color:var(--sub);font-size:14px}
+/* 轻量提示 Toast：仅在无法持久保存（隐私 / 本地模式）时由 JS 触发，2 秒自动消失，不阻挡卡片 */
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(8px);
+  max-width:84vw;padding:11px 16px;border-radius:14px;background:rgba(18,40,46,.92);color:#fff;
+  font-size:13px;line-height:1.45;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.22);
+  opacity:0;pointer-events:none;transition:opacity .22s ease,transform .22s ease;z-index:80}
+.toast.is-show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* 结构化结果卡 */
+.card{min-width:0;background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:18px 16px;box-shadow:var(--shadow)}
+.block{min-width:0;padding:14px 0;border-bottom:1px dashed #e6edef}
+.block:first-child{padding-top:0}
+.block:last-child{padding-bottom:0;border-bottom:0}
+.block__title{display:flex;align-items:center;gap:6px;margin:0 0 8px;font-size:12px;font-weight:700;
+  letter-spacing:.04em;color:var(--brand-ink)}
+.block__title::before{content:"";flex:0 0 3px;width:3px;height:12px;border-radius:2px;background:var(--grad)}
+.block--meta .block__title::before{background:#b6c6ca}
+.block__text{margin:0;white-space:pre-line;word-break:break-word}
+.block--lead .block__text{font-size:16px;font-weight:650;line-height:1.8;color:#103b44;
+  background:linear-gradient(135deg,#eaf9f6,#eff5ff);border-left:3px solid var(--brand);
+  border-radius:0 12px 12px 0;padding:14px}
+.steps{list-style:none;margin:0;padding:0;counter-reset:step}
+.step{display:flex;gap:10px;min-width:0;padding:8px 0;counter-increment:step}
+.step::before{content:counter(step);flex:0 0 22px;height:22px;margin-top:2px;display:flex;
+  align-items:center;justify-content:center;border-radius:50%;background:var(--grad);
+  color:#fff;font-size:12px;font-weight:700}
+.step__body{flex:1;min-width:0}
+.step__row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;min-width:0}
+.step__text{margin:0;flex:1;min-width:0;white-space:pre-line}
+.step__note{margin:6px 0 0;font-size:13px;color:var(--sub);white-space:pre-line}
+.step__arrow{flex:0 0 8px;width:8px;height:8px;margin-top:7px;border-right:2px solid #9ca3af;border-bottom:2px solid #9ca3af}
+.step.is-expandable{cursor:pointer;touch-action:manipulation}
+.materials{margin:0;padding-left:20px}
+.materials li{padding:2px 0}
+/* 赋分标准速查：逐格明细来自 PPT 纯图片页，紧凑两列排版 */
+.block--score .materials{padding-left:0;list-style:none;display:grid;gap:5px}
+.block--score .materials li{padding:7px 10px;border-radius:9px;background:rgba(231,244,246,.75);
+  font-size:13px;line-height:1.55;word-break:break-word}
+.meta{margin:0}
+.meta__row{display:flex;gap:8px;min-width:0;padding:4px 0;font-size:12.5px}
+.meta__key{flex:0 0 60px;color:var(--sub)}
+.meta__val{flex:1;min-width:0;margin:0;color:#4b656c;word-break:break-all}
+
+/* 结果页操作栏 */
+.actions{display:flex;gap:10px;margin-top:14px;min-width:0}
+.act{position:relative;flex:1;min-width:0;height:46px;display:flex;align-items:center;justify-content:center;gap:8px;
+  border:1px solid var(--line);border-radius:14px;background:#fff;color:#33555e;font-size:14px;font-weight:700;
+  cursor:pointer;touch-action:manipulation;box-shadow:var(--shadow-sm)}
+.act.is-checked{background:#f3fbf9;border-color:#a9ddd7;color:#0b6a72}
+.act__tick{position:relative;flex:0 0 16px;width:16px;height:16px;border:1.5px solid #9ca3af;border-radius:50%}
+.act__tick::after{content:"";position:absolute;left:4px;top:1px;width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0}
+.act.is-checked .act__tick{background:var(--brand);border-color:var(--brand)}
+.act__star{position:relative;flex:0 0 16px;width:16px;height:16px}
+.act__star::before,.act__star::after{content:"★";position:absolute;inset:0;font-size:16px;line-height:16px}
+.act__star::before{color:#d1d5db}
+.act__star::after{color:#f59e0b}
+
+/* 待办 / 收藏列表 */
+.itemlist{list-style:none;margin:0;padding:0}
+.item{margin-bottom:10px}
+.item__link{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;width:100%;
+  min-height:52px;padding:14px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-sm);text-align:left;font:inherit;color:inherit;cursor:pointer}
+.item__text{flex:1;min-width:0;font-size:14px}
+.item__arrow{flex:0 0 auto;color:#9ca3af}
+
+/* 规则说明：顶部死固定返回栏 + 正文容器留白、深灰、行高 1.6、段落间距 16px、小标题加粗 */
+.about-bar{position:sticky;top:0;z-index:6;display:flex;align-items:center;gap:10px;
+  padding:10px 4px;margin:0 -4px 6px;background:linear-gradient(180deg,#fff 80%,rgba(255,255,255,.85));
+  border-bottom:1px solid var(--line);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.about-back{display:inline-flex;align-items:center;gap:4px;min-height:40px;padding:6px 12px 6px 10px;
+  border:1px solid var(--line);border-radius:999px;background:#fff;color:#33555e;font-size:14px;font-weight:600;
+  cursor:pointer;touch-action:manipulation}
+.about-back::before{content:"←";font-size:17px;line-height:1;margin-right:2px}
+.about-bar__title{font-size:16px;font-weight:750;color:#123840}
+.about-body{padding:20px;color:#333;line-height:1.6;font-size:14px}
+.about-body p{margin:0 0 16px;word-break:break-word}
+.about-body h3{margin:22px 0 8px;font-size:15px;font-weight:700;color:#123840;line-height:1.4}
+.about-body .about-src{font-size:13px;color:#4b656c;word-break:break-all;margin-bottom:8px}
+.about-body .about-disclaimer{margin:18px 0 0;padding:12px 14px;border-radius:12px;background:#fffbeb;color:#92400e;font-size:13px;line-height:1.6}
+
+/* 底部导航 */
+.tabbar{position:fixed;left:50%;bottom:0;width:100%;max-width:420px;transform:translateX(-50%);display:flex;z-index:5;
+  padding:8px 8px calc(8px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-top:1px solid var(--line)}
+.tabbar button{position:relative;flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:4px;
+  height:44px;border-radius:12px;font-size:14px;color:var(--sub);overflow:hidden;background:transparent;border:0;cursor:pointer;font-family:inherit;padding:0}
+.tabbar button::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,#d7f2ee,#dfeaff);opacity:0}
+.tabbar button > *{position:relative}
+.tabbar button.is-active::before{opacity:1}
+.tabbar button.is-active{color:#0b6a72;font-weight:700}
+.badge{font-size:11px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--grad);
+  color:#fff;display:inline-flex;align-items:center;justify-content:center}
+
+/* ===== 动效：补间属性只有 transform / opacity，时长 150–250ms ===== */
+[data-press]{transition:transform var(--motion-dur-fast) var(--motion-ease)}
+[data-press].is-pressed{transform:scale(.96)}
+.chip,.tabbar a,.act{transition:transform 180ms var(--motion-ease)}
+.chip::before,.tabbar a::before{transition:opacity 180ms var(--motion-ease)}
+.chip.is-active{transform:scale(1.03)}
+.chip.is-pressed,.tabbar button.is-pressed,.act.is-pressed{transform:scale(.96)}
+
+/* 必须动效 1｜场景胶囊选中态：底色 opacity 0→1 + 本体 scale 1→1.03（同组互斥） */
+/* 必须动效 2｜加入待办打勾 */
+.act__tick::after{opacity:0;transform:scale(.6) rotate(45deg);
+  transition:opacity var(--motion-dur) var(--motion-ease),transform var(--motion-dur) var(--motion-ease)}
+.act.is-checked .act__tick::after{opacity:1;transform:scale(1) rotate(45deg)}
+.act__star::before{opacity:1;transform:scale(1);transition:opacity 180ms var(--motion-ease),transform 180ms var(--motion-ease)}
+.act__star::after{opacity:0;transform:scale(.6);transition:opacity 180ms var(--motion-ease),transform 180ms var(--motion-ease)}
+.act.is-active .act__star::before{opacity:0}
+.act.is-active .act__star::after{opacity:1;transform:scale(1)}
+
+/* 必须动效 3｜步骤展开 / 收起：不做 height 补间，占位由 hidden 一次性切换 */
+.step__arrow{transform:rotate(-45deg);transition:transform 180ms var(--motion-ease)}
+.step.is-expanded .step__arrow{transform:rotate(45deg)}
+.step__note{opacity:0;transform:translateY(-6px);
+  transition:opacity var(--motion-dur-fast) var(--motion-ease),transform var(--motion-dur-fast) var(--motion-ease)}
+.step.is-expanded .step__note{opacity:1;transform:translateY(0)}
+
+/* 减少动态效果：只关过程，不关状态（终态仍完整可见） */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+  .step__note{opacity:1!important;transform:none!important}
+  [data-press].is-pressed{transform:none!important}
+}
+@media (max-width:374px){
+  .app{padding-left:8px;padding-right:8px}
+  .card{padding:16px 12px}
+  .hero{padding:18px 14px}
+  .hero__title{font-size:21px}
+  .btn{padding:0 14px}
+}
+@media (min-width:600px){
+  body{background:#eaf2f3}
+  .app{padding-left:16px;padding-right:16px}
+  .hero{margin-top:14px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <button class="brand" type="button" data-nav="home" data-press>二课答疑<span>办事卡</span></button>
+    <button class="topbar__link" type="button" data-nav="about" data-press>规则说明</button>
+  </header>
+
+  <div id="app-state" class="app-state" hidden></div>
+
+  <main>
+    <section id="view-home" class="view">
+      <div class="hero">
+        <h1 class="hero__title">输入你的问题，直接拿到一张能照着办的卡</h1>
+        <p class="hero__sub">结论 · 下一步 · 去哪办 · 带什么 · 注意什么</p>
+      </div>
+      <form id="search-form" class="search" autocomplete="off">
+        <input id="q" class="search__input" type="search" placeholder="输入问题或关键词" aria-label="输入问题">
+        <button class="btn btn--primary" type="submit" data-press>查一下</button>
+      </form>
+      <div class="guide">
+        <h2 class="guide__title">按主题找答案<span>点关键词直接查</span></h2>
+        <div id="guide-tabs" class="guide__tabs" role="tablist" aria-label="主题分类"></div>
+        <div id="guide-groups"></div>
+      </div>
+      <div class="quick">
+        <h2 class="quick__title">大家常问</h2>
+        <div id="quick-list" class="chips"></div>
+      </div>
+      <details class="browse" id="browse">
+        <summary class="browse__summary">浏览全部主题<span id="browse-count"></span></summary>
+        <div id="browse-groups" class="browse__groups"></div>
+      </details>
+      <div id="search-state" class="state" hidden></div>
+    </section>
+
+    <section id="view-result" class="view" hidden>
+      <div class="view-head"><button class="back" type="button" data-nav="home" data-press>‹ 返回</button></div>
+      <div id="result" class="state"></div>
+      <div id="result-actions" class="actions" hidden>
+        <button id="btn-todo" class="act" type="button" data-press aria-pressed="false">
+          <span class="act__tick" aria-hidden="true"></span><span class="act__label">加入待办</span>
+        </button>
+        <button id="btn-fav" class="act" type="button" data-press aria-pressed="false">
+          <span class="act__star" aria-hidden="true"></span><span class="act__label">收藏</span>
+        </button>
+      </div>
+    </section>
+
+    <section id="view-todo" class="view" hidden><h2 class="view__title">我的待办</h2><div id="todo-list"></div></section>
+    <section id="view-fav" class="view" hidden><h2 class="view__title">我的收藏</h2><div id="fav-list"></div></section>
+    <section id="view-about" class="view" hidden>
+      <div class="about-bar">
+        <button class="about-back" type="button" data-nav="home">返回</button>
+        <span class="about-bar__title">规则说明</span>
+      </div>
+      <div id="about"></div>
+    </section>
+  </main>
+
+  <nav class="tabbar" aria-label="主导航">
+    <button type="button" data-nav="home" data-press><span>首页</span></button>
+    <button type="button" data-nav="todo" data-press><span>待办</span><b id="todo-count" class="badge" hidden></b></button>
+    <button type="button" data-nav="fav" data-press><span>收藏</span><b id="fav-count" class="badge" hidden></b></button>
+    <button type="button" data-nav="about" data-press><span>规则</span></button>
+  </nav>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</div>
+
+<script>
+/* ===== 知识库：cards.json 全量内联。唯一事实来源，页面不读取任何外部文件 ===== */
+const guideData = [
+  {
+    "key": "signin",
+    "name": "签到补签",
+    "count": 8,
+    "hints": [
+      "完成活动次数",
+      "讲座数量没增多",
+      "补签",
+      "签到码",
+      "忘记签到",
+      "签到异常"
+    ]
+  },
+  {
+    "key": "credit",
+    "name": "信誉分",
+    "count": 5,
+    "hints": [
+      "恢复信誉分",
+      "被扣分",
+      "低于90",
+      "报名不了",
+      "不能报名",
+      "扣分规则"
+    ]
+  },
+  {
+    "key": "system_error",
+    "name": "系统异常",
+    "count": 3,
+    "hints": [
+      "打不开",
+      "登录失败",
+      "点击无响应",
+      "清缓存",
+      "记录消失",
+      "记录缺失"
+    ]
+  },
+  {
+    "key": "volunteer",
+    "name": "志愿时长",
+    "count": 7,
+    "hints": [
+      "时长没同步",
+      "三位一体",
+      "志愿时长没录入",
+      "同步延迟",
+      "校外志愿",
+      "组织审核"
+    ]
+  },
+  {
+    "key": "account",
+    "name": "账号信息",
+    "count": 4,
+    "hints": [
+      "姓名错误",
+      "学号错误",
+      "更换社长",
+      "自行修改",
+      "本人修改",
+      "录错一个字"
+    ]
+  },
+  {
+    "key": "course_credit",
+    "name": "学分认定",
+    "count": 9,
+    "hints": [
+      "创新学分",
+      "校级讲座",
+      "课程时长",
+      "强制时长",
+      "讲座次数",
+      "8次讲座"
+    ]
+  },
+  {
+    "key": "data_sync",
+    "name": "教务同步",
+    "count": 1,
+    "hints": [
+      "批量同步",
+      "数据不同步",
+      "教务没有记录",
+      "教务系统查不到",
+      "二课里有志愿服务",
+      "暑假实践记录，教务系统查不到"
+    ]
+  },
+  {
+    "key": "exchange",
+    "name": "积分兑换",
+    "count": 4,
+    "hints": [
+      "积分开放",
+      "学活3楼",
+      "机器卡顿",
+      "扫码报错",
+      "兑换报错",
+      "显示有库存"
+    ]
+  },
+  {
+    "key": "transcript",
+    "name": "成绩单赋分",
+    "count": 12,
+    "hints": [
+      "五大板块",
+      "科技立项",
+      "公益之星",
+      "名次转换",
+      "爱心献血",
+      "献血加分"
+    ]
+  },
+  {
+    "key": "activity",
+    "name": "活动申报",
+    "count": 12,
+    "hints": [
+      "加速审核",
+      "周末活动",
+      "周四申请",
+      "周末申请",
+      "人员限制",
+      "创建活动"
+    ]
+  },
+  {
+    "key": "checkin_ops",
+    "name": "签到与总结",
+    "count": 8,
+    "hints": [
+      "活动发起",
+      "人脸签到",
+      "大型活动",
+      "社长代签",
+      "活动总结",
+      "点击提交"
+    ]
+  },
+  {
+    "key": "class_eval",
+    "name": "班团考评",
+    "count": 8,
+    "hints": [
+      "班团考评",
+      "下载模板",
+      "考评权限",
+      "活动申报",
+      "组织机构",
+      "班级管理员"
+    ]
+  },
+  {
+    "key": "entrance",
+    "name": "入口与提醒",
+    "count": 5,
+    "hints": [
+      "系统入口",
+      "制度文件",
+      "政策依据",
+      "团学组织",
+      "志愿活动",
+      "劳动学分"
+    ]
+  },
+  {
+    "key": "principles",
+    "name": "分流与原则",
+    "count": 6,
+    "hints": [
+      "补签纪律",
+      "承诺恢复",
+      "严禁承诺",
+      "谁说了算",
+      "记录问题",
+      "最终目标"
+    ]
+  }
+];
+
+const cardsData = [
+  {
+    "id": "card-signin-001",
+    "scene": "参加了活动，完成活动次数还是 0？",
+    "keywords": [
+      "完成活动次数",
+      "次数还是0",
+      "没录入",
+      "讲座数量没增多",
+      "记录不更新",
+      "次数",
+      "记录",
+      "数量",
+      "等完结",
+      "讲座数量",
+      "讲座",
+      "录入",
+      "没增多",
+      "次数没变",
+      "次数还是没变"
+    ],
+    "conclusion": "若活动尚未完结：主办方还没有归档结算，签到签退状态暂不更新",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "请等状态变为完结之后再查看",
+        "note": "完结后依旧异常再来找我"
+      }
+    ],
+    "materials": null,
+    "location": null,
+    "notes": "活动结束 30 天未完结将自动完结，公众号 18：30 提醒；活动待完结，每周一早上 8 点提醒完结",
+    "source": "《二课答疑手册》· 一 活动签到、补签、记录异常板块 + 《院二课中心负责人培训会 PPT》（2025-10-13）· 第 21 页 校园文化活动前提须知表",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "signin"
+  },
+  {
+    "id": "card-signin-002",
+    "scene": "签到记录有误，怎么补签？",
+    "keywords": [
+      "补签",
+      "补录",
+      "签到异常",
+      "只签未退",
+      "漏签",
+      "忘签到",
+      "显示未参与",
+      "到场证明",
+      "现场补录",
+      "签到码",
+      "签到记录有误",
+      "忘记签到",
+      "签到错了",
+      "没签到",
+      "没有签到码",
+      "没人说签到码"
+    ],
+    "conclusion": "仅已经报名该活动的同学可以后台补签；没有报名活动，我这边无法补签，请联系活动主办方询问是否支持现场补录。",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "自查：截图“活动参与”页面，确认是否已报名该活动",
+        "note": "仅已经报名该活动的同学可以后台补签"
+      },
+      {
+        "key": "s2",
+        "text": "自查：活动是否已完结",
+        "note": null
+      },
+      {
+        "key": "s3",
+        "text": "完结后依旧异常：备齐材料联系二课工作人员后台处理",
+        "note": "若活动已经完结：显示未签退、未签到、未参与，请提供姓名和学号，附带到场证明（现场照片、视频等），收到你的信息后，稍后后台处理，处理完成你刷新页面查看状态。"
+      }
+    ],
+    "materials": [
+      "姓名",
+      "学号",
+      "活动参与页面截图",
+      "到场证明（现场照片、视频等）"
+    ],
+    "location": "二课工作人员；未报名的现场补录联系活动主办方",
+    "notes": "若活动尚未完结：主办方还没有归档结算，签到签退状态暂不更新，请等状态变为完结之后再查看；完结后依旧异常再来找我。",
+    "source": "《二课答疑手册》· 一 活动签到、补签、记录异常板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "signin"
+  },
+  {
+    "id": "card-credit-001",
+    "scene": "信誉分被扣了怎么恢复？",
+    "keywords": [
+      "信誉分恢复",
+      "扣分了怎么办",
+      "恢复信誉分",
+      "补回",
+      "违约分",
+      "被扣了",
+      "不能报名",
+      "重置",
+      "怎么恢复",
+      "如何恢复",
+      "恢复",
+      "被扣分",
+      "信誉分怎么恢复",
+      "如何恢复信誉分"
+    ],
+    "conclusion": "活动参与记录我可以后台帮你修正，但是信誉分属于系统自动规则，人工无法恢复修改。",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "信誉分隔一个月自动恢复满。",
+        "note": "信誉分每月自动重置回满分100分。"
+      },
+      {
+        "key": "s2",
+        "text": "如果信誉分不足，无法线上报名活动，你可以提前联系活动主办方，确认该活动是否支持现场补录；部分活动支持现场录入，不需要线上提前报名。",
+        "note": null
+      }
+    ],
+    "materials": null,
+    "location": "系统自动规则，无需办理；对扣分有异议联系二课工作人员",
+    "notes": "同学你好，信誉分满分100分。活动开始前3h取消，扣信誉分3分；未签到签退，扣信誉分5分。信誉分小于等于90无法报名活动。",
+    "source": "《二课答疑手册》· 二 信誉分相关板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "credit"
+  },
+  {
+    "id": "card-credit-002",
+    "scene": "信誉分低于 90 还能报名活动吗？",
+    "keywords": [
+      "信誉分不够",
+      "不能报名",
+      "报名限制",
+      "小于等于90",
+      "现场补录",
+      "现场录入",
+      "线上报名",
+      "90",
+      "低于90",
+      "还能报名",
+      "报名活动",
+      "信誉分不足",
+      "报名不了"
+    ],
+    "conclusion": "信誉分小于等于90无法报名活动。",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "你可以提前联系活动主办方，确认该活动是否支持现场补录；部分活动支持现场录入，不需要线上提前报名。",
+        "note": null
+      }
+    ],
+    "materials": null,
+    "location": null,
+    "notes": "如果信誉分不足，无法线上报名活动",
+    "source": "《二课答疑手册》· 二 信誉分相关板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "credit"
+  },
+  {
+    "id": "card-volunteer-001",
+    "scene": "志愿汇时长没同步到二课怎么办？",
+    "keywords": [
+      "志愿汇",
+      "三位一体",
+      "时长没录入",
+      "志愿时长丢失",
+      "时长不同步",
+      "学号",
+      "签到签退",
+      "完结",
+      "组织",
+      "志愿时长",
+      "时长没同步",
+      "没同步",
+      "同步到二课",
+      "志愿时长没录入",
+      "志愿汇时长"
+    ],
+    "conclusion": "按照操作步骤，确保加入【杭州电子科技大学】组织，学号填写正确，活动完成签到+签退，并且活动已经由负责人审核完结。",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "自查：是否已加入【杭州电子科技大学】组织、学号填写正确",
+        "note": "按照操作步骤确认组织与学号"
+      },
+      {
+        "key": "s2",
+        "text": "自查：活动是否完成签到+签退并由负责人审核完结",
+        "note": "未完结的活动数据暂不更新"
+      },
+      {
+        "key": "s3",
+        "text": "仍不同步：备齐材料反馈协助同步",
+        "note": "自查以上条件全部满足依旧不同步，请把学号、志愿汇页面截图发给我协助反馈同步；二课同步会存在延迟，以志愿汇显示的审核后时长为准。"
+      }
+    ],
+    "materials": [
+      "学号",
+      "志愿汇页面截图"
+    ],
+    "location": "二课工作人员 / 志愿活动负责人",
+    "notes": "i志愿、归属外部社会组织的志愿活动不能自动同步二课\n志愿汇定位打卡失败，开启定位权限，在规定签到时间靠近地点打卡，多次失败联系志愿活动负责人补录荣誉时数。\n组织入群申请未通过，请联系志愿汇组织审核负责人处理。",
+    "source": "《二课答疑手册》· 四 志愿汇时长同步板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "volunteer"
+  },
+  {
+    "id": "card-sys-001",
+    "scene": "小程序网页打不开、点击无响应、登录失败怎么办？",
+    "keywords": [
+      "打不开",
+      "卡在活动详情页",
+      "啥也没得点",
+      "点击无响应",
+      "登录失败",
+      "卡死",
+      "无响应",
+      "刷新",
+      "清缓存",
+      "换网络",
+      "小程序",
+      "网页打不开",
+      "点不动",
+      "登不上",
+      "登录不了"
+    ],
+    "conclusion": "大量打不开:当前使用人员太多，平台维护系统，暂时无法访问，请稍后重试。",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "个人打不开：点击右上角三点，刷新试试",
+        "note": null
+      },
+      {
+        "key": "s2",
+        "text": "切换网络（校园网/手机流量），清除浏览器缓存或者更换浏览器，更换设备，再次尝试。",
+        "note": null
+      }
+    ],
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "source": "《二课答疑手册》· 三 二课系统功能异常板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "system_error"
+  },
+  {
+    "id": "card-signin-003",
+    "scene": "扫码签到成功但系统显示未参与 / 只签到未签退怎么办？",
+    "keywords": [
+      "显示未参与",
+      "只签未退",
+      "漏签",
+      "忘签到",
+      "未签退",
+      "未签到",
+      "扫码",
+      "签到",
+      "签退",
+      "未参与",
+      "完结",
+      "到场证明"
+    ],
+    "conclusion": "若活动已经完结：显示未签退、未签到、未参与，请提供姓名和学号，附带到场证明（现场照片、视频等），收到你的信息后，稍后后台处理，处理完成你刷新页面查看状态。",
+    "steps": [
+      {
+        "key": "k1",
+        "text": "自查：活动是否已完结",
+        "note": "完结后仍显示未签退、未签到、未参与才属于异常"
+      },
+      {
+        "key": "k2",
+        "text": "备齐材料联系二课工作人员后台处理",
+        "note": "处理完成后刷新页面查看状态"
+      }
+    ],
+    "materials": [
+      "姓名",
+      "学号",
+      "到场证明（现场照片、视频等）"
+    ],
+    "location": "二课工作人员",
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 一 活动签到、补签、记录异常板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "signin"
+  },
+  {
+    "id": "card-signin-004",
+    "scene": "现场纸质签到 / 填 WPS 表单 / 没有签到码，手机没有扫码记录",
+    "keywords": [
+      "现场纸质签到",
+      "WPS表单",
+      "无签到码",
+      "没有扫码记录",
+      "在操场跑活动没人说签到码",
+      "没人说签到码",
+      "纸质签到",
+      "WPS",
+      "签到码",
+      "扫码",
+      "操场",
+      "主办方"
+    ],
+    "conclusion": "同学你好，请截图“活动参与”页面来确认二课是否报名。",
+    "steps": null,
+    "materials": null,
+    "location": "活动主办方（询问是否支持现场补录）",
+    "notes": "仅已经报名该活动的同学可以后台补签；没有报名活动，我这边无法补签，请联系活动主办方询问是否支持现场补录。",
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 一 活动签到、补签、记录异常板块 + 《答疑群聊天记录分析报告 v1.0》· Q8",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "signin"
+  },
+  {
+    "id": "card-signin-005",
+    "scene": "签到码损坏、误扫补录码，说已人工补录但系统无记录",
+    "keywords": [
+      "签到码损坏",
+      "误扫补录码",
+      "已人工补录但系统无记录",
+      "签到码",
+      "补录码",
+      "人工补录",
+      "系统无记录"
+    ],
+    "conclusion": "若活动已经完结：显示未签退、未签到、未参与，请提供姓名和学号，附带到场证明（现场照片、视频等），收到你的信息后，稍后后台处理，处理完成你刷新页面查看状态。",
+    "steps": null,
+    "materials": [
+      "姓名",
+      "学号",
+      "到场证明（现场照片、视频等）"
+    ],
+    "location": "二课工作人员",
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 一 活动签到、补签、记录异常板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "signin"
+  },
+  {
+    "id": "card-signin-006",
+    "scene": "活动状态长期“待审核”，什么时候结算？",
+    "keywords": [
+      "待审核",
+      "活动结算时间",
+      "长期待审核",
+      "结算",
+      "归档",
+      "完结"
+    ],
+    "conclusion": "若活动尚未完结：主办方还没有归档结算，签到签退状态暂不更新，请等状态变为完结之后再查看；",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "完结后依旧异常再来找我。",
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 一 活动签到、补签、记录异常板块 + 《院二课中心负责人培训会 PPT》（2025-10-13）· 第 21 页 校园文化活动前提须知表",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "signin"
+  },
+  {
+    "id": "card-signin-007",
+    "scene": "没报名活动，能直接补签补录吗？",
+    "keywords": [
+      "未报名补签",
+      "没报名能补录吗",
+      "学生未报名活动",
+      "未报名",
+      "补签",
+      "补录",
+      "主办方"
+    ],
+    "conclusion": "仅已经报名该活动的同学可以后台补签；",
+    "steps": null,
+    "materials": null,
+    "location": "活动主办方",
+    "notes": "没有报名活动，我这边无法补签，请联系活动主办方询问是否支持现场补录。",
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 一 活动签到、补签、记录异常板块 + 《二课答疑手册》· 九 通用工作原则",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "signin"
+  },
+  {
+    "id": "card-signin-008",
+    "scene": "上次的讲座为什么还没录入？",
+    "keywords": [
+      "上次讲座没录入",
+      "讲座为什么还没录入",
+      "三位一体讲座",
+      "讲座",
+      "录入",
+      "完结",
+      "归档"
+    ],
+    "conclusion": "若活动尚未完结：主办方还没有归档结算，签到签退状态暂不更新，请等状态变为完结之后再查看；",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "完结后依旧异常再来找我。",
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 一 活动签到、补签、记录异常板块 + 《答疑群聊天记录分析报告 v1.0》· Q13",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "signin"
+  },
+  {
+    "id": "card-credit-003",
+    "scene": "补签之后，被扣的信誉分能恢复吗？",
+    "keywords": [
+      "补签后恢复信誉分",
+      "后台补录完成信誉分仍被扣",
+      "补回信誉分",
+      "补签",
+      "补录",
+      "信誉分",
+      "人工",
+      "恢复"
+    ],
+    "conclusion": "活动参与记录我可以后台帮你修正，但是信誉分属于系统自动规则，人工无法恢复修改。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "信誉分每月自动重置回满分100分。",
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 二 信誉分相关板块 + 《二课答疑手册》· 九 通用工作原则",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "credit"
+  },
+  {
+    "id": "card-credit-004",
+    "scene": "信誉分是怎么扣的？",
+    "keywords": [
+      "扣分规则",
+      "违约机制",
+      "活动开始前3h取消",
+      "信誉分",
+      "扣",
+      "3分",
+      "5分",
+      "90",
+      "违约"
+    ],
+    "conclusion": "同学你好，信誉分满分100分。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "活动开始前3h取消，扣信誉分3分；未签到签退，扣信誉分5分。信誉分小于等于90无法报名活动。信誉分隔一个月自动恢复满。",
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 二 信誉分相关板块 + 《院二课中心负责人培训会 PPT》（2025-10-13）· 第 21 页 校园文化活动前提须知表",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "credit"
+  },
+  {
+    "id": "card-credit-005",
+    "scene": "信誉分多久重置一次？",
+    "keywords": [
+      "每月自动重置",
+      "信誉分恢复时间",
+      "隔一个月",
+      "信誉分",
+      "重置",
+      "每月",
+      "自动恢复"
+    ],
+    "conclusion": "信誉分隔一个月自动恢复满。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "但导入不受影响。信誉分每月自动重置回满分100分。",
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 二 信誉分相关板块 + 《院二课中心负责人培训会 PPT》（2025-10-13）· 第 21 页 校园文化活动前提须知表",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "credit"
+  },
+  {
+    "id": "card-sys-002",
+    "scene": "活动统计总数和实际展示记录不一致、部分学年记录消失",
+    "keywords": [
+      "统计数量对不上",
+      "记录消失",
+      "记录缺失",
+      "部分学年记录消失",
+      "统计",
+      "数量",
+      "记录",
+      "缺失",
+      "核查"
+    ],
+    "conclusion": "活动记录缺失、统计数量对不上：请提供学号姓名，稍后后台调取数据核查。",
+    "steps": [
+      {
+        "key": "k1",
+        "text": "自查：确认是否为未参与情况",
+        "note": "后台调取数据核查时会判断是否存在未参与情况"
+      },
+      {
+        "key": "k2",
+        "text": "提供学号姓名，联系二课工作人员后台核查",
+        "note": "稍后后台调取数据核查"
+      }
+    ],
+    "materials": [
+      "学号",
+      "姓名"
+    ],
+    "location": "二课工作人员",
+    "notes": "判断是否存在未参与情况。",
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 三 二课系统功能异常板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "system_error"
+  },
+  {
+    "id": "card-sys-003",
+    "scene": "账号提示未激活 / 二课信息导入失败怎么办？",
+    "keywords": [
+      "账号未激活",
+      "统一身份认证",
+      "认证失败",
+      "导入失败",
+      "未激活",
+      "登录",
+      "激活",
+      "导入"
+    ],
+    "conclusion": "账号提示未激活，请使用学校统一身份认证登录激活，认证失败联系二课平台管理员处理。",
+    "steps": null,
+    "materials": null,
+    "location": "二课平台管理员",
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 三 二课系统功能异常板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "system_error"
+  },
+  {
+    "id": "card-volunteer-002",
+    "scene": "志愿汇绑定了学号，但两边时长数字不一致",
+    "keywords": [
+      "两边时长不一致",
+      "时长数字不一致",
+      "同步延迟",
+      "志愿汇",
+      "时长",
+      "不一致",
+      "延迟",
+      "截图"
+    ],
+    "conclusion": "①自查以上条件全部满足依旧不同步，请把学号、志愿汇页面截图发给我协助反馈同步；",
+    "steps": null,
+    "materials": [
+      "学号",
+      "志愿汇页面截图"
+    ],
+    "location": "二课工作人员",
+    "notes": "二课同步会存在延迟，以志愿汇显示的审核后时长为准。",
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 四 志愿汇时长同步板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "volunteer"
+  },
+  {
+    "id": "card-volunteer-003",
+    "scene": "校外志愿 / 外省 i 志愿平台的志愿活动能录入二课吗？",
+    "keywords": [
+      "i志愿",
+      "外省i志愿",
+      "校外志愿",
+      "外部社会组织",
+      "校外",
+      "外省",
+      "社会组织",
+      "同步"
+    ],
+    "conclusion": "②i志愿、归属外部社会组织的志愿活动不能自动同步二课",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 四 志愿汇时长同步板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "volunteer"
+  },
+  {
+    "id": "card-volunteer-004",
+    "scene": "志愿汇定位签到失败怎么办？",
+    "keywords": [
+      "定位打卡失败",
+      "定位签到失败",
+      "补录荣誉时数",
+      "定位",
+      "打卡",
+      "签到",
+      "权限",
+      "荣誉时数"
+    ],
+    "conclusion": "③志愿汇定位打卡失败，开启定位权限，在规定签到时间靠近地点打卡，多次失败联系志愿活动负责人补录荣誉时数。",
+    "steps": null,
+    "materials": null,
+    "location": "志愿活动负责人",
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 四 志愿汇时长同步板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "volunteer"
+  },
+  {
+    "id": "card-volunteer-005",
+    "scene": "志愿汇组织入群申请迟迟不通过怎么办？",
+    "keywords": [
+      "组织申请不通过",
+      "入群申请未通过",
+      "组织审核",
+      "组织",
+      "入群",
+      "申请",
+      "审核",
+      "志愿汇"
+    ],
+    "conclusion": "④组织入群申请未通过，请联系志愿汇组织审核负责人处理。",
+    "steps": null,
+    "materials": null,
+    "location": "志愿汇组织审核负责人",
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 四 志愿汇时长同步板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "volunteer"
+  },
+  {
+    "id": "card-volunteer-006",
+    "scene": "志愿汇时长同步二课需要满足哪些前提？",
+    "keywords": [
+      "同步前提",
+      "同步条件",
+      "加入杭州电子科技大学组织",
+      "志愿汇",
+      "前提",
+      "同步",
+      "组织",
+      "学号",
+      "签退"
+    ],
+    "conclusion": "同学你好，志愿汇时长同步二课前提：按照操作步骤，确保加入【杭州电子科技大学】组织，学号填写正确，活动完成签到+签退，并且活动已经由负责人审核完结。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 四 志愿汇时长同步板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "volunteer"
+  },
+  {
+    "id": "card-volunteer-007",
+    "scene": "志愿汇的志愿活动能算志愿服务积分吗？",
+    "keywords": [
+      "志愿服务积分",
+      "志愿汇1/小时",
+      "志愿服务活动加分",
+      "志愿汇",
+      "志愿服务",
+      "积分",
+      "1/小时",
+      "数据链接"
+    ],
+    "conclusion": "参加志愿服务活动：志愿汇数据链接，要求志愿汇进入杭州电子科技大学组织，基本信息填写学号，一般找我校志愿者组织数据均可呈现；",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "授予积分 1/小时。",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 10-14 页内嵌赋分标准表截图（社会实践与志愿服务）",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "volunteer"
+  },
+  {
+    "id": "card-account-001",
+    "scene": "个人姓名、学号信息错误 / 系统显示曾用名怎么改？",
+    "keywords": [
+      "姓名错误",
+      "学号错误",
+      "曾用名",
+      "志愿汇同步失败",
+      "个人信息错误",
+      "姓名",
+      "学号",
+      "修改",
+      "后台",
+      "同步",
+      "学生个人姓名、学号信息错误；系统显示曾用名，志愿汇同步失败",
+      "社会实践小组填报名字录错一个字，学号正确但是无记录",
+      "社团二课管理员还是旧社长，需要更换新任社长"
+    ],
+    "conclusion": "同学你好，学生本人无法直接修改二课后台信息。",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "①个人信息错误/曾用名问题：提供学号、姓名、需修改内容，稍后帮您后台修改数据，等待数据同步，刷新再看一下。"
+      },
+      {
+        "key": "k1",
+        "text": "确认本人无法直接修改二课后台信息",
+        "note": "需由工作人员后台修改"
+      },
+      {
+        "key": "k2",
+        "text": "提供学号、姓名、需修改内容",
+        "note": "等待数据同步，刷新再看一下"
+      }
+    ],
+    "materials": [
+      "学号",
+      "姓名",
+      "需修改内容"
+    ],
+    "location": "二课工作人员",
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 五 账号信息修改板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "account"
+  },
+  {
+    "id": "card-account-002",
+    "scene": "社会实践小组名单录错了一个字怎么办？",
+    "keywords": [
+      "小组名单录错",
+      "录错一个字",
+      "学号正确但是无记录",
+      "小组",
+      "实践",
+      "名单",
+      "录错",
+      "项目名称"
+    ],
+    "conclusion": "②小组实践名单录错：提供项目名称、学号、姓名、需修改内容，稍后帮您后台修改数据，等待数据同步，刷新再看一下。",
+    "steps": null,
+    "materials": [
+      "项目名称",
+      "学号",
+      "姓名",
+      "需修改内容"
+    ],
+    "location": "二课工作人员",
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 五 账号信息修改板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "account"
+  },
+  {
+    "id": "card-account-003",
+    "scene": "社团二课管理员还是旧社长，怎么更换？",
+    "keywords": [
+      "更换社长",
+      "旧社长",
+      "管理员变更",
+      "学生管理员",
+      "社团",
+      "管理员",
+      "社长",
+      "指导老师",
+      "切换"
+    ],
+    "conclusion": "③社团二课管理员变更：学生不能自行切换管理员，需要指导老师认命学生管理员，提供社团名称、学号、姓名、需修改内容，稍后帮您后台修改数据，等待数据同步，刷新再看一下。",
+    "steps": null,
+    "materials": [
+      "社团名称",
+      "学号",
+      "姓名",
+      "需修改内容"
+    ],
+    "location": "二课工作人员 / 指导老师",
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 五 账号信息修改板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "account"
+  },
+  {
+    "id": "card-account-004",
+    "scene": "学生能自己修改二课后台信息吗？",
+    "keywords": [
+      "自己改信息",
+      "自行修改",
+      "本人修改",
+      "学生本人",
+      "修改",
+      "后台",
+      "信息"
+    ],
+    "conclusion": "同学你好，学生本人无法直接修改二课后台信息。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 五 账号信息修改板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "account"
+  },
+  {
+    "id": "card-course-001",
+    "scene": "带“劳动教育”标签的活动算劳动学分吗？",
+    "keywords": [
+      "劳动教育学分",
+      "劳动课",
+      "4次社会实践要求",
+      "劳动教育标签",
+      "劳动教育算学分吗",
+      "劳动教育算不算",
+      "劳动教育",
+      "劳动学分",
+      "社会实践与志愿服务",
+      "标签",
+      "认定",
+      "带“劳动教育”标签的活动是否算劳动学分、是否计入4次社会实践要求",
+      "讲座、图书馆活动算不算校级讲座；活动能不能拿创新学分",
+      "咨询二课、德育分是否存在每学期上限，二课是否有硬性时长要求"
+    ],
+    "conclusion": "同学你好，社团工作人员不做学分判定，以学校文件、学院、辅导员、活动主办方为准，建议查阅学院通知和咨询你的辅导员。",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "①劳动学分：不是标题带有劳动教育就直接认定学分，【社会实践与志愿服务】标签专项活动才计入劳动学分的4次社会实践要求。"
+      }
+    ],
+    "materials": null,
+    "location": "所在学院、辅导员、活动主办方",
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 六 活动学分认定板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "course_credit"
+  },
+  {
+    "id": "card-course-002",
+    "scene": "活动能不能拿创新学分？",
+    "keywords": [
+      "创新学分",
+      "海报详情页",
+      "可加创新学分",
+      "海报",
+      "详情页",
+      "发放"
+    ],
+    "conclusion": "同学你好，社团工作人员不做学分判定，以学校文件、学院、辅导员、活动主办方为准，建议查阅学院通知和咨询你的辅导员。",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "②创新学分：只有活动海报详情页明确标注可加创新学分才发放。"
+      }
+    ],
+    "materials": null,
+    "location": "所在学院、辅导员、活动主办方",
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 六 活动学分认定板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "course_credit"
+  },
+  {
+    "id": "card-course-003",
+    "scene": "讲座、图书馆活动算不算校级讲座？",
+    "keywords": [
+      "讲座算校级吗",
+      "校级讲座",
+      "图书馆活动",
+      "德育分上限",
+      "讲座",
+      "校级",
+      "院级",
+      "图书馆",
+      "德育分",
+      "上限"
+    ],
+    "conclusion": "同学你好，社团工作人员不做学分判定，以学校文件、学院、辅导员、活动主办方为准，建议查阅学院通知和咨询你的辅导员。",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "③校级讲座、德育分上限：各学院标准不一样，请查阅学院通知或者咨询辅导员。"
+      }
+    ],
+    "materials": null,
+    "location": "所在学院、辅导员",
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 六 活动学分认定板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "course_credit"
+  },
+  {
+    "id": "card-course-004",
+    "scene": "二课有强制每学期时长要求吗？",
+    "keywords": [
+      "二课的课程需要达到一定时长吗",
+      "课程时长",
+      "强制时长",
+      "硬性时长要求",
+      "时长",
+      "课程",
+      "强制",
+      "每学期",
+      "培养方案"
+    ],
+    "conclusion": "同学你好，社团工作人员不做学分判定，以学校文件、学院、辅导员、活动主办方为准，建议查阅学院通知和咨询你的辅导员。",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "④二课没有强制每学期时长要求，劳动教育等学时按培养方案执行。"
+      }
+    ],
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 六 活动学分认定板块 + 《答疑群聊天记录分析报告 v1.0》· Q6",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "course_credit"
+  },
+  {
+    "id": "card-course-005",
+    "scene": "讲座要参加多少次才能拿到课外教育学分？",
+    "keywords": [
+      "讲座要参加几次",
+      "讲座次数",
+      "8次讲座",
+      "至少4次校团委",
+      "讲座1学分",
+      "课外教育学分",
+      "讲座",
+      "8次",
+      "4次",
+      "学分",
+      "1学分"
+    ],
+    "conclusion": "同学你好，社团工作人员不做学分判定，以学校文件、学院、辅导员、活动主办方为准，建议查阅学院通知和咨询你的辅导员。",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "6、讲座：安排在第 1～8 学期进行，主要内容为：人文、科技、思想教育、心理健康和艺术等。学生根据兴趣爱好至少参加 8 次（其中参加校团委组织的讲座至少 4 次），方可获得 1 学分。由校团委负责实施。"
+      },
+      {
+        "key": "s2",
+        "text": "③校级讲座、德育分上限：各学院标准不一样，请查阅学院通知或者咨询辅导员。"
+      }
+    ],
+    "materials": null,
+    "location": "所在学院、辅导员、校团委",
+    "notes": null,
+    "scoreRows": null,
+    "source": "《杭州电子科技大学本科生课外教育管理办法（2019 年修订）》（杭电本〔2019〕17 号）（《院二课中心负责人培训会 PPT》（2025-10-13）· 第 34 页内嵌文件截图） + 《二课答疑手册》· 六 活动学分认定板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "course_credit"
+  },
+  {
+    "id": "card-course-006",
+    "scene": "阳光长跑 / 体育课外活动有什么要求？",
+    "keywords": [
+      "阳光长跑",
+      "36天",
+      "每学期不少于14天",
+      "体育课外活动",
+      "体育",
+      "36",
+      "14",
+      "运动队",
+      "体育教学部"
+    ],
+    "conclusion": "同学你好，社团工作人员不做学分判定，以学校文件、学院、辅导员、活动主办方为准，建议查阅学院通知和咨询你的辅导员。",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "3、体育课外活动：安排在第 5～6 学期进行，主要内容为：阳光长跑活动或学校运动队训练及比赛，每个学生都须参与相应的体育活动。阳光长跑活动要求两学期至少进行 36 天，其中每学期不少于 14 天。参与学校运动队训练及比赛的学生，可以免除阳光长跑，参照体育教学部运动队管理办法，由运动队教练员负责评定分数。成绩评定由体育教学部负责政策解读和具体实施。"
+      }
+    ],
+    "materials": null,
+    "location": "体育教学部 / 所在学院、辅导员",
+    "notes": null,
+    "scoreRows": null,
+    "source": "《杭州电子科技大学本科生课外教育管理办法（2019 年修订）》（杭电本〔2019〕17 号）（《院二课中心负责人培训会 PPT》（2025-10-13）· 第 34 页内嵌文件截图）",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "course_credit"
+  },
+  {
+    "id": "card-course-007",
+    "scene": "课外读书活动要读几本书？",
+    "keywords": [
+      "课外读书",
+      "8本书",
+      "读书笔记",
+      "读后感",
+      "读书",
+      "8本",
+      "笔记",
+      "名著"
+    ],
+    "conclusion": "同学你好，社团工作人员不做学分判定，以学校文件、学院、辅导员、活动主办方为准，建议查阅学院通知和咨询你的辅导员。",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "4、课外读书活动：安排在第 1～8 学期进行，主要内容有：中外名著、名人传记、人文和社会科学等。书目由马克思主义学院、人文与法学院提出，学校确定后向全校公布，每个学生应阅读其中 8 本以上书籍，每本均须提交读书笔记（或读后感）。根据学生阅读书目及读书笔记（或读后感）等情况评定成绩。由马克思主义学院、人文与法学院负责实施。"
+      }
+    ],
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《杭州电子科技大学本科生课外教育管理办法（2019 年修订）》（杭电本〔2019〕17 号）（《院二课中心负责人培训会 PPT》（2025-10-13）· 第 34 页内嵌文件截图）",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "course_credit"
+  },
+  {
+    "id": "card-course-008",
+    "scene": "社会实践要参加几次？",
+    "keywords": [
+      "社会实践学分",
+      "至少参加1次",
+      "介绍信回执",
+      "社会实践报告",
+      "社会实践",
+      "1次",
+      "介绍信",
+      "回执",
+      "报告",
+      "校团委"
+    ],
+    "conclusion": "同学你好，社团工作人员不做学分判定，以学校文件、学院、辅导员、活动主办方为准，建议查阅学院通知和咨询你的辅导员。",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "5、社会实践：安排在第 1～8 学期进行，以加强爱国主义教育、科技文化服务和社区援助行动等教育型和服务型的社会实践活动为重点，每个学生至少参加 1 次，每次均要有社会实践专用介绍信回执和社会实践报告。由校团委负责实施。"
+      }
+    ],
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《杭州电子科技大学本科生课外教育管理办法（2019 年修订）》（杭电本〔2019〕17 号）（《院二课中心负责人培训会 PPT》（2025-10-13）· 第 34 页内嵌文件截图）",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "course_credit"
+  },
+  {
+    "id": "card-course-009",
+    "scene": "课外教育成绩什么时候汇总？本规定从哪一级开始执行？",
+    "keywords": [
+      "五月份汇总",
+      "2017级",
+      "成绩登记",
+      "教务处负责解释",
+      "课外教育",
+      "成绩",
+      "汇总",
+      "五月份",
+      "2017",
+      "教务处"
+    ],
+    "conclusion": "同学你好，社团工作人员不做学分判定，以学校文件、学院、辅导员、活动主办方为准，建议查阅学院通知和咨询你的辅导员。",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "四、各学院必须做好学生课外教育成绩的登记工作，于每年五月份对各年级学生的课外教育成绩、学分进行汇总统计，并整理、保存好成绩记载的原始资料。"
+      },
+      {
+        "key": "s2",
+        "text": "五、本规定自 2017 级学生开始实施。2016 级及以前学生课外教育项目按《杭州电子科技大学本科生课外教育管理规定》（杭电教[2013]145 号）规定执行。"
+      },
+      {
+        "key": "s3",
+        "text": "六、本规定由教务处负责解释。"
+      }
+    ],
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《杭州电子科技大学本科生课外教育管理办法（2019 年修订）》（杭电本〔2019〕17 号）（《院二课中心负责人培训会 PPT》（2025-10-13）· 第 34 页内嵌文件截图）",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "course_credit"
+  },
+  {
+    "id": "card-sync-001",
+    "scene": "二课里有志愿服务 / 暑假实践记录，教务系统查不到",
+    "keywords": [
+      "教务系统查不到",
+      "数据不同步",
+      "教务没有记录",
+      "批量同步",
+      "教务",
+      "同步",
+      "志愿服务",
+      "暑假实践",
+      "截图",
+      "批量"
+    ],
+    "conclusion": "同学你好，二课与教务系统不是实时互通。",
+    "steps": null,
+    "materials": [
+      "二课记录截图"
+    ],
+    "location": "学院团委或教务老师",
+    "notes": "请保存好二课记录截图，提交给学院团委或教务老师，学校会进行批量同步。",
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 七 二课与教务系统数据不同步板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "data_sync"
+  },
+  {
+    "id": "card-exchange-001",
+    "scene": "积分兑换什么时候开放？显示有库存却提示未开始",
+    "keywords": [
+      "兑换开放时间",
+      "积分开放",
+      "什么时候能兑换",
+      "本期兑换未开始",
+      "显示有库存",
+      "积分",
+      "兑换",
+      "开放",
+      "时间",
+      "库存",
+      "周期",
+      "积分商城显示有库存，提示本期兑换未开始",
+      "线下兑换机位置，积分兑换机兑换有无上限",
+      "机器卡顿，兑换机器扫码兑换报错"
+    ],
+    "conclusion": "同学你好，积分商城兑换有固定开放周期，库存仅在开放时段生效，开放时间以公众号通知为准；",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "学活3楼有线下兑换机器，积分兑换上限为100；机器卡顿可去学活二楼南208寻找办公室人员处理；如果机器扫码报错，请确认处于开放时间，退出页面重新尝试，持续报错联系二课平台管理员",
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 八 积分商城板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "exchange"
+  },
+  {
+    "id": "card-exchange-002",
+    "scene": "线下积分兑换机在哪？一次最多能兑多少？",
+    "keywords": [
+      "线下兑换机位置",
+      "学活3楼",
+      "兑换上限为100",
+      "兑换机上限",
+      "兑换机",
+      "积分",
+      "上限",
+      "100"
+    ],
+    "conclusion": "学活3楼有线下兑换机器，积分兑换上限为100",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 八 积分商城板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "exchange"
+  },
+  {
+    "id": "card-exchange-003",
+    "scene": "积分兑换机器卡顿怎么办？",
+    "keywords": [
+      "机器卡顿",
+      "兑换机卡了",
+      "学活二楼南208",
+      "机器",
+      "卡顿",
+      "兑换",
+      "南208"
+    ],
+    "conclusion": "机器卡顿可去学活二楼南208寻找办公室人员处理",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 八 积分商城板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "exchange"
+  },
+  {
+    "id": "card-exchange-004",
+    "scene": "兑换机器扫码兑换报错怎么办？",
+    "keywords": [
+      "扫码报错",
+      "兑换报错",
+      "扫码兑换报错",
+      "扫码",
+      "报错",
+      "兑换",
+      "开放时间"
+    ],
+    "conclusion": "如果机器扫码报错，请确认处于开放时间，退出页面重新尝试，持续报错联系二课平台管理员",
+    "steps": null,
+    "materials": null,
+    "location": "二课平台管理员",
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 八 积分商城板块",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "exchange"
+  },
+  {
+    "id": "card-transcript-001",
+    "scene": "二课成绩单设置了哪五大板块？",
+    "keywords": [
+      "五大板块",
+      "成绩单板块",
+      "思想政治与道德素养",
+      "组织协调与学生工作",
+      "成绩单",
+      "思想政治",
+      "科技学术",
+      "社会实践",
+      "文体艺术",
+      "组织协调"
+    ],
+    "conclusion": "目前成绩单中设置了思想政治与道德素养、科技学术与创新创业、社会实践与志愿服务、文体艺术与身心发展、组织协调与学生工作五大板块，具体细项请查看推文【杭电二课成绩单来啦】或申请添加。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 36 页 成绩单投稿 + 《院二课中心负责人培训会 PPT》（2025-10-13）· 第 10-14 页内嵌赋分标准表截图（思想政治与道德素养）",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "transcript"
+  },
+  {
+    "id": "card-transcript-002",
+    "scene": "思想政治与道德素养板块的积分标准是什么？",
+    "keywords": [
+      "思想政治赋分",
+      "国家特等奖12分",
+      "青马学院积分",
+      "思想政治类表彰",
+      "思想政治",
+      "赋分",
+      "积分",
+      "特等奖",
+      "青马学院",
+      "表彰"
+    ],
+    "conclusion": "作为观众、参与者参加校园文化中思想政治类活动：二课系统，1/小时、1.5/小时。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "参与思想政治类比赛等（团委导入）：国家级及以上 12/9/8/7/6.5 项，省级 6.5/6/5.5/5/4.5 项，校级 4.5/4/3.5/3/2.5 项，院级 2.5/2/1/0.5 项。青马学院：雏鹰班学员/优秀学员 2/项、3/项，菁英班学员/优秀学员 3/项、5/项。获得思想政治类表彰：国家级及以上 9/项、省级及以上 6/项、校级及以上 4/项、院级及以上 2/项。计入思想政治与道德素养能力。完整明细见「速查」页。",
+    "scoreRows": [
+      "作为观众、参与者参加校园文化中思想政治类活动｜1/小时、1.5/小时｜二课系统",
+      "国家级及以上 · 国家特等奖｜12/项｜团委导入",
+      "国家级及以上 · 国家一等奖｜9/项｜团委导入",
+      "国家级及以上 · 国家二等奖｜8/项｜团委导入",
+      "国家级及以上 · 国家三等奖｜7/项｜团委导入",
+      "国家级及以上 · 成功参赛奖/优胜奖｜6.5/项｜团委导入",
+      "省级 · 省级特等奖｜6.5/项｜团委导入",
+      "省级 · 省级一等奖｜6/项｜团委导入",
+      "省级 · 省级二等奖｜5.5/项｜团委导入",
+      "省级 · 省级三等奖｜5/项｜团委导入",
+      "省级 · 省级参赛奖｜4.5/项｜团委导入",
+      "校级 · 校级特等奖｜4.5/项｜团委导入",
+      "校级 · 校级一等奖｜4/项｜团委导入",
+      "校级 · 校级二等奖｜3.5/项｜团委导入",
+      "校级 · 校级三等奖｜3/项｜团委导入",
+      "校级 · 校级参赛奖｜2.5/项｜团委导入",
+      "院级 · 院级特等奖｜2.5/项｜团委导入",
+      "院级 · 院级一等奖｜2/项｜团委导入",
+      "院级 · 院级二等奖｜1/项｜团委导入",
+      "院级 · 院级三等奖｜0.5/项｜团委导入",
+      "雏鹰班学员/优秀学员｜2/项、3/项｜团委导入",
+      "菁英班学员/优秀学员｜3/项、5/项｜团委导入",
+      "国家级及以上表彰｜9/项｜团委导入",
+      "省级及以上表彰｜6/项｜团委导入",
+      "校级及以上表彰｜4/项｜团委导入",
+      "院级及以上表彰｜2/项｜团委导入"
+    ],
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 10-14 页内嵌赋分标准表截图（思想政治与道德素养）",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "transcript"
+  },
+  {
+    "id": "card-transcript-003",
+    "scene": "科技学术与创新创业板块的积分标准是什么？",
+    "keywords": [
+      "科技学术赋分",
+      "GPA数据为准",
+      "科技立项",
+      "科技创新类表彰",
+      "科技",
+      "创新",
+      "竞赛",
+      "GPA",
+      "立项",
+      "赋分"
+    ],
+    "conclusion": "作为观众、参与者角色参与校园文化中创新创业类活动：二课系统，1/小时、1.5/小时。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "学生科技竞赛获奖（省级及以上以 GPA 数据为准，教务处）：国家级及以上 12/9/8/7/6.5 项，省级 6.5/6/5.5/5/4.5 项，校级 4.5/4/3.5/3/2.5 项，院级 2.5/2/1/0.5 项。参与科技立项类项目（团委导入）：国家级立项 6/项、省级立项 6/项、校级立项 4/项、院级立项 2/项。获得科技创新类表彰：国家级及以上 9/项、省级及以上 6/项、校级及以上 4/项、院级及以上 2/项。计入科技学术与创新创业能力。完整明细见「速查」页。",
+    "scoreRows": [
+      "作为观众、参与者角色参与校园文化中创新创业类活动｜1/小时、1.5/小时｜二课系统",
+      "国家级及以上 · 国家特等奖｜12/项｜教务处",
+      "国家级及以上 · 国家一等奖｜9/项｜教务处",
+      "国家级及以上 · 国家二等奖｜8/项｜教务处",
+      "国家级及以上 · 国家三等奖｜7/项｜教务处",
+      "国家级及以上 · 成功参赛奖/优胜奖｜6.5/项｜教务处",
+      "省级 · 省级特等奖｜6.5/项｜教务处",
+      "省级 · 省级一等奖｜6/项｜教务处",
+      "省级 · 省级二等奖｜5.5/项｜教务处",
+      "省级 · 省级三等奖｜5/项｜教务处",
+      "省级 · 省级参赛奖｜4.5/项｜教务处",
+      "校级 · 校级特等奖｜4.5/项｜教务处",
+      "校级 · 校级一等奖｜4/项｜教务处",
+      "校级 · 校级二等奖｜3.5/项｜教务处",
+      "校级 · 校级三等奖｜3/项｜教务处",
+      "校级 · 校级参赛奖｜2.5/项｜教务处",
+      "院级 · 院级特等奖｜2.5/项｜教务处",
+      "院级 · 院级一等奖｜2/项｜教务处",
+      "院级 · 院级二等奖｜1/项｜教务处",
+      "院级 · 院级三等奖｜0.5/项｜教务处",
+      "国家级立项｜6/项｜团委导入",
+      "省级立项｜6/项｜团委导入",
+      "校级立项｜4/项｜团委导入",
+      "院级立项｜2/项｜团委导入",
+      "国家级及以上表彰｜9/项｜团委导入",
+      "省级及以上表彰｜6/项｜团委导入",
+      "校级及以上表彰｜4/项｜团委导入",
+      "院级及以上表彰｜2/项｜团委导入"
+    ],
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 10-14 页内嵌赋分标准表截图（科技学术与创新创业）",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "transcript"
+  },
+  {
+    "id": "card-transcript-004",
+    "scene": "社会实践与志愿服务板块的积分标准是什么？",
+    "keywords": [
+      "社会实践赋分",
+      "公益之星",
+      "劳动教育活动积分",
+      "志愿汇数据链接",
+      "社会实践",
+      "志愿服务",
+      "赋分",
+      "劳动教育"
+    ],
+    "conclusion": "参加志愿服务活动：志愿汇数据链接（要求志愿汇进入杭州电子科技大学组织，基本信息填写学号，一般找我校志愿者组织数据均可呈现），1/小时。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "作为观众、参与者角色参与校园文化中劳动教育类活动：二课系统，1/小时、1.5/小时。参加校内/外实践基地的劳动教育活动：1.5/小时。参加寒（招就处）暑假（社会实践模块）社会实践（系统导入）：国家级及以上表彰 9/项、省级及以上 6/项、校级及以上 4/项、仅参加 2/项。学生志愿服务类竞赛获奖（\"优秀志愿者\"\"优秀志愿服务项目\"等荣誉称号，系统导入）：国家级及以上表彰 9/项、省级及以上 6/项、校级及以上 4/项、院级及以上 2/项。青春杭电系列\"公益之星\"荣誉称号：团委导入，4/项。计入社会实践能力。完整明细见「速查」页。",
+    "scoreRows": [
+      "参加志愿服务活动｜1/小时｜志愿汇数据链接",
+      "作为观众、参与者角色参与校园文化中劳动教育类活动｜1/小时、1.5/小时｜二课系统",
+      "参加校内/外实践基地的劳动教育活动｜1.5/小时｜二课系统",
+      "国家级及以上表彰｜9/项｜系统导入",
+      "省级及以上表彰｜6/项｜系统导入",
+      "校级及以上表彰｜4/项｜系统导入",
+      "仅参加｜2/项｜系统导入",
+      "国家级及以上表彰｜9/项｜系统导入",
+      "省级及以上表彰｜6/项｜系统导入",
+      "校级及以上表彰｜4/项｜系统导入",
+      "院级及以上表彰｜2/项｜系统导入",
+      "公益之星｜4/项｜团委导入"
+    ],
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 10-14 页内嵌赋分标准表截图（社会实践与志愿服务）",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "transcript"
+  },
+  {
+    "id": "card-transcript-005",
+    "scene": "文体艺术与身心发展板块的积分标准是什么？",
+    "keywords": [
+      "文体艺术赋分",
+      "爱心献血3分",
+      "体育类竞赛获奖",
+      "名次转换",
+      "爱心献血",
+      "献血加分",
+      "文体",
+      "艺术",
+      "体育",
+      "美育",
+      "献血",
+      "爱心",
+      "赋分"
+    ],
+    "conclusion": "作为观众、参与者角色参与校园文化体育/美育类活动：二课系统，1/小时、1.5/小时。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "学生艺术/体育类竞赛获奖（团委导入 / 体育部导入）：省级及以上以 GPA 数据为准，部分比赛以加分分为准；第一名转换为特等奖，第二、三转换为一等奖，第四、五、六名转换为二等奖，第七、八名转换为三等奖，第九、十、十一、十二转换为参赛奖；国家级及以上 12/9/8/7/6.5 项，省级 6.5/6/5.5/5/4.5 项，校级 4.5/4/3.5/3/2.5 项，院级 2.5/2/1/0.5 项。爱心献血：红十字会，3/项。获得文体艺术与身心发展表彰：国家级及以上 9/项、省级及以上 6/项、校级及以上 4/项、院级及以上 2/项。计入文体艺术与身心发展能力。完整明细见「速查」页。",
+    "scoreRows": [
+      "作为观众、参与者角色参与校园文化体育/美育类活动｜1/小时、1.5/小时｜二课系统",
+      "国家级及以上 · 国家特等奖｜12/项｜团委导入 / 体育部导入",
+      "国家级及以上 · 国家一等奖｜9/项｜团委导入 / 体育部导入",
+      "国家级及以上 · 国家二等奖｜8/项｜团委导入 / 体育部导入",
+      "国家级及以上 · 国家三等奖｜7/项｜团委导入 / 体育部导入",
+      "国家级及以上 · 成功参赛奖/优胜奖｜6.5/项｜团委导入 / 体育部导入",
+      "省级 · 省级特等奖｜6.5/项｜团委导入 / 体育部导入",
+      "省级 · 省级一等奖｜6/项｜团委导入 / 体育部导入",
+      "省级 · 省级二等奖｜5.5/项｜团委导入 / 体育部导入",
+      "省级 · 省级三等奖｜5/项｜团委导入 / 体育部导入",
+      "省级 · 省级参赛奖｜4.5/项｜团委导入 / 体育部导入",
+      "校级 · 校级特等奖｜4.5/项｜团委导入 / 体育部导入",
+      "校级 · 校级一等奖｜4/项｜团委导入 / 体育部导入",
+      "校级 · 校级二等奖｜3.5/项｜团委导入 / 体育部导入",
+      "校级 · 校级三等奖｜3/项｜团委导入 / 体育部导入",
+      "校级 · 校级参赛奖｜2.5/项｜团委导入 / 体育部导入",
+      "院级 · 院级特等奖｜2.5/项｜团委导入 / 体育部导入",
+      "院级 · 院级一等奖｜2/项｜团委导入 / 体育部导入",
+      "院级 · 院级二等奖｜1/项｜团委导入 / 体育部导入",
+      "院级 · 院级三等奖｜0.5/项｜团委导入 / 体育部导入",
+      "爱心献血｜3/项｜红十字会",
+      "国家级及以上表彰｜9/项｜团委导入",
+      "省级及以上表彰｜6/项｜团委导入",
+      "校级及以上表彰｜4/项｜团委导入",
+      "院级及以上表彰｜2/项｜团委导入"
+    ],
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 10-14 页内嵌赋分标准表截图（文体艺术与身心发展） + 《院二课中心负责人培训会 PPT》（2025-10-13）· 第 10-14 页内嵌赋分标准表截图（文体艺术与身心发展·竞赛）",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "transcript"
+  },
+  {
+    "id": "card-transcript-006",
+    "scene": "组织协调与学生工作板块的积分标准是什么？",
+    "keywords": [
+      "组织协调赋分",
+      "学生干部加分",
+      "班团组织积分",
+      "力行之星",
+      "组织协调",
+      "学生工作",
+      "主席团",
+      "班团",
+      "奖学金",
+      "赋分"
+    ],
+    "conclusion": "以组织者角色组织校园文化中各类活动：二课系统，0.5/项。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "校团委各部门、校级学生会（个人考核优秀额外+0.5/学期）：主席团 3.5/学期、工作人员（负责人）2.5/学期、工作人员 1/学期。院级学生会、院级团委各部门（个人考核优秀额外+0.5/学期）：主席团 3/学期、工作人员（负责人）2/学期、工作人员 0.5/学期。校院级社团（四星级及以上 / 三星级及以下，班团组织系统）：主席团 3/2.5、工作人员（负责人）2/2、工作人员 0.5/0.5 每学期。班团组织：班长、团支书 3/2/1/0 学期；其他班委、团支部委员 2/1/0.5/0 学期。优秀共青团干部、优秀学生干部（社团、班委）、三好学生（团委导入）：国家级及以上 9/项、省级及以上 6/项、校级及以上 4/项。奖学金：学工导入，4/项。青春杭电系列\"力行之星\"荣誉称号：团委导入，4/项。计入组织协调能力。完整明细见「速查」页。",
+    "scoreRows": [
+      "以组织者角色组织校园文化中各类活动｜0.5/项｜二课系统",
+      "主席团｜3.5/学期｜班团组织系统",
+      "工作人员（负责人）｜2.5/学期｜班团组织系统",
+      "工作人员｜1/学期｜班团组织系统",
+      "主席团｜3/学期｜班团组织系统",
+      "工作人员（负责人）｜2/学期｜班团组织系统",
+      "工作人员｜0.5/学期｜班团组织系统",
+      "主席团｜3/学期｜班团组织系统",
+      "工作人员（负责人）｜2/学期｜班团组织系统",
+      "工作人员｜0.5/学期｜班团组织系统",
+      "主席团｜2.5/学期｜班团组织系统",
+      "工作人员（负责人）｜2/学期｜班团组织系统",
+      "工作人员｜0.5/学期｜班团组织系统",
+      "班长、团支书｜3/2/1/0 学期｜班团组织系统",
+      "其他班委、团支部委员｜2/1/0.5/0 学期｜班团组织系统",
+      "国家级及以上表彰｜9/项｜团委导入",
+      "省级及以上表彰｜6/项｜团委导入",
+      "校级及以上表彰｜4/项｜团委导入",
+      "奖学金｜4/项｜学工导入",
+      "力行之星｜4/项｜团委导入"
+    ],
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 10-14 页内嵌赋分标准表截图（组织协调与学生工作）",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "transcript"
+  },
+  {
+    "id": "card-transcript-007",
+    "scene": "成绩单投稿流程是什么？",
+    "keywords": [
+      "成绩单投稿",
+      "投稿流程",
+      "统一投稿",
+      "盖章文件",
+      "投稿",
+      "成绩单",
+      "盖章",
+      "excel",
+      "流程"
+    ],
+    "conclusion": "一、投稿流程",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "1. 仅接受各学院 / 部处或学生组织统一投稿；"
+      },
+      {
+        "key": "s2",
+        "text": "2. 把每学期对外盖章的思想、科技、文化、体育、劳动的盖章文件储存起来，下学期初以 excel 名单 + 盖章文件压缩。"
+      },
+      {
+        "key": "s3",
+        "text": "3. 目前成绩单中设置了思想政治与道德素养、科技学术与创新创业、社会实践与志愿服务、文体艺术与身心发展、组织协调与学生工作五大板块，具体细项请查看推文【杭电二课成绩单来啦】或申请添加。"
+      }
+    ],
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 36 页 成绩单投稿",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "transcript"
+  },
+  {
+    "id": "card-transcript-008",
+    "scene": "成绩单投稿发到哪个邮箱？未尽事宜找谁？",
+    "keywords": [
+      "投稿邮箱",
+      "hduerke2024",
+      "二课QQ群",
+      "联系方式",
+      "成绩单投稿邮箱",
+      "投稿",
+      "邮箱",
+      "QQ群"
+    ],
+    "conclusion": "二、投稿方式：上传 excel 名单 + 盖章文件至邮箱 hduerke2024@163.com",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "三、联系方式：未尽事宜，在二课 QQ 群联系工作人员"
+      }
+    ],
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 36 页 成绩单投稿",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "transcript"
+  },
+  {
+    "id": "card-transcript-009",
+    "scene": "哪些组织的名单可以直接附到投稿邮箱？",
+    "keywords": [
+      "常见清单",
+      "校团委组织部",
+      "直接附名单",
+      "必须项",
+      "清单",
+      "投稿",
+      "组织",
+      "名单",
+      "学号",
+      "姓名"
+    ],
+    "conclusion": "常见清单：",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "1、校团委组织部：卡尔马克思、红船杯、优秀共青团员、优秀学生干部（目前不需要，已从党委学工部获取到）、优秀共青团干部。"
+      },
+      {
+        "key": "s2",
+        "text": "2、校学生会：十佳歌手、十大提案、129 大合唱、大演说家、十佳笔记等"
+      },
+      {
+        "key": "s3",
+        "text": "3、校科协：挑战杯（目前不需要，已从教务处获取到）、新苗。"
+      },
+      {
+        "key": "s4",
+        "text": "4、红十字会：每学期初献血。"
+      },
+      {
+        "key": "s5",
+        "text": "5、招协：每年 3 月份寒实名单。"
+      },
+      {
+        "key": "s6",
+        "text": "6、资助中心：十佳勤工。"
+      },
+      {
+        "key": "s7",
+        "text": "7、莽原文学社：同一首诗、莽原杯。"
+      },
+      {
+        "key": "s8",
+        "text": "8、校青协：暑期社会实践、暑实先进个人。"
+      }
+    ],
+    "materials": null,
+    "location": null,
+    "notes": "以上组织直接附名单到邮箱即可，其余组织若有传承性内容可联系工作人员申请添加至成绩单。各学院团学尽量有人投稿数据到成绩单邮箱。（学号、姓名、时间、名称是必须项才能导入）",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 37 页 成绩单投稿常见清单",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "transcript"
+  },
+  {
+    "id": "card-transcript-010",
+    "scene": "第二课堂成绩单怎么下载？",
+    "keywords": [
+      "成绩单下载",
+      "下载成绩单",
+      "二课成绩单怎么弄",
+      "成绩单",
+      "下载",
+      "登录",
+      "公众号"
+    ],
+    "conclusion": "方式一 : 登录二课系统 https://erke.hdu.edu.cn/ 下载",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "方式二：手机端进入公众号“青春杭电第二课堂”下载",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 4 页 成绩单下载",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "transcript"
+  },
+  {
+    "id": "card-transcript-011",
+    "scene": "第二课堂成绩单有使用效力吗？会盖章吗？",
+    "keywords": [
+      "成绩单效力",
+      "加盖团委公章",
+      "试运行阶段",
+      "综合素质测评",
+      "成绩单",
+      "效力",
+      "公章",
+      "试运行",
+      "综测"
+    ],
+    "conclusion": "2、二课成绩单使用效力。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "目前，众多高校已经采纳了“第二课堂成绩单”作为学生综合素质测评和课外学分的依据。关于此制度的详细信息和指导原则，可以查阅《深化学校共青团改革的若干措施》（中青联发〔2020〕7 号）和《关于在高校实施共青团“第二课堂成绩单”制度的意见》（中青联发〔2018〕5 号）两份文件。第二课堂成绩单最终会加盖团委的公章（目前为试运行阶段）。",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 9 页 注意须知 + 《院二课中心负责人培训会 PPT》（2025-10-13）· 第 6 页 第二课堂成绩单制度文件",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "transcript"
+  },
+  {
+    "id": "card-transcript-012",
+    "scene": "学生干部加分以什么形式呈现？考评比例谁定？",
+    "keywords": [
+      "学生干部加分",
+      "考评比例",
+      "班团考评比例",
+      "学生干部",
+      "加分",
+      "成绩单",
+      "校团委"
+    ],
+    "conclusion": "1、学生干部加分只以第二课堂成绩单形式呈现。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "学生组织考评比例只以校团委所发文件为准，各学院之前在综测里面如果有学生干部的考评比例需要修正。如有需求，可申请提高比例，校团委审核通过。班团考评比例原则上以学院自行为准，只需录入数据即可。",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 9 页 注意须知",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "transcript"
+  },
+  {
+    "id": "card-activity-001",
+    "scene": "活动审批需要多久？能加速审核吗？",
+    "keywords": [
+      "加速审核",
+      "催审",
+      "加急",
+      "审核要多久",
+      "明天比赛今天能加速审核吗",
+      "审批",
+      "审核",
+      "加速",
+      "8点",
+      "16点",
+      "3天"
+    ],
+    "conclusion": "审批时间：校团委工作日每天早上 8 点和下午 4 点审批，如遇特殊情况可私信二课工作人员催。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "建议提前 3 天申请。",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 21 页 校园文化活动前提须知表 + 《答疑群聊天记录分析报告 v1.0》· Q11",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "activity"
+  },
+  {
+    "id": "card-activity-002",
+    "scene": "周末办活动要什么时候申请？",
+    "keywords": [
+      "周末活动",
+      "周四申请",
+      "周末申请",
+      "周末",
+      "周四",
+      "申请",
+      "老师"
+    ],
+    "conclusion": "周末：周末的活动请周四直接申请掉，老师周末没上班。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 21 页 校园文化活动前提须知表",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "activity"
+  },
+  {
+    "id": "card-activity-003",
+    "scene": "活动报名人数有最低要求吗？",
+    "keywords": [
+      "最低报名人数",
+      "10人",
+      "活动时间不得过长",
+      "活动人数",
+      "报名",
+      "最低"
+    ],
+    "conclusion": "活动人数：活动报名人数最低不低于 10 人，活动时间不得过长",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 21 页 校园文化活动前提须知表",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "activity"
+  },
+  {
+    "id": "card-activity-004",
+    "scene": "可以限制只有自己社团成员参加吗？",
+    "keywords": [
+      "限制社团成员",
+      "人员限制",
+      "报名限制",
+      "只允许年级学院",
+      "年级",
+      "学院",
+      "社团成员"
+    ],
+    "conclusion": "人员限制：可限制年级、学院。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "目前不允许限制仅社团成员参加。\n报名限制：班级限制、年级限制、学院限制、学生组织限制；若添加限制，则仅有添加的指定限制单位所在成员可报名本活动；只允许年级、学院限制，不允许只限制自己社团的人参加",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 21 页 校园文化活动前提须知表 + 《院二课中心负责人培训会 PPT》（2025-10-13）· 第 24 页 活动申请表单（内嵌图片）",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "activity"
+  },
+  {
+    "id": "card-activity-005",
+    "scene": "怎么给各学院分名额？",
+    "keywords": [
+      "分名额",
+      "给各学院分名额",
+      "收集名单导入",
+      "名额",
+      "学院",
+      "报名时间",
+      "导入"
+    ],
+    "conclusion": "分名额给各学院：设置报名时间为当前时刻，之后收集名单导入即可。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 21 页 校园文化活动前提须知表",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "activity"
+  },
+  {
+    "id": "card-activity-006",
+    "scene": "报名人员可以导入吗？怎么导入？",
+    "keywords": [
+      "导入报名名单",
+      "报名人员导入",
+      "电脑端导入",
+      "报名",
+      "导入",
+      "名单",
+      "电脑端",
+      "审核通过"
+    ],
+    "conclusion": "报名人员导入：活动审核通过后，可在电脑端导入报名同学，适合已经提前知道报名的学生。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "选用，适用于已经知道报名人数的，可直接在全部报名这导入报名名单。导入名单对外面名额没有影响",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 21 页 校园文化活动前提须知表 + 《院二课中心负责人培训会 PPT》（2025-10-13）· 第 26 页 报名名单导入",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "activity"
+  },
+  {
+    "id": "card-activity-007",
+    "scene": "怎么创建一个校园文化活动？",
+    "keywords": [
+      "创建活动",
+      "申请活动",
+      "校园文化活动",
+      "活动管理",
+      "创建",
+      "活动",
+      "电脑登录",
+      "社长",
+      "操作指南"
+    ],
+    "conclusion": "1. 电脑登录： https://erke.hdu.edu.cn/ 学生管理员账号（社长）才能，可以把账号给部长去搞",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "2. 申请活动 —— 校园文化活动 —— 活动管理 —— 创建活动"
+      }
+    ],
+    "materials": null,
+    "location": "二课社长群（操作指南文件）",
+    "notes": "校园文化活动操作指南文件在二课社长群文件夹中可查询",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 22 页 校园文化活动创建",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "activity"
+  },
+  {
+    "id": "card-activity-008",
+    "scene": "活动申请表单怎么填？有哪些必填项？",
+    "keywords": [
+      "活动表单",
+      "必填项",
+      "签到码提前10min",
+      "签退码15min",
+      "海报886*1200",
+      "协办单位1-3个",
+      "表单",
+      "活动名称",
+      "主办单位",
+      "签到码",
+      "签退码",
+      "海报",
+      "管理员"
+    ],
+    "conclusion": "请起好活动名称 / 选择正确的活动类型 / 选择正确的活动内容 / 支持线上线下 / 下拉选择主办单位，大部分都是你们社团指导单位 / 填写你们社团，名称可以输入，一定有你们社团搜索填社团的部分全称，填简称搜不到 / 协办单位 1-3 个 / 提前10min，方便签到码，签到码按活动开始时间才能生成 / 签退码在生成签到码15min后可生成，与这个无关 / 具体活动开始时间、结束时间 / 线上填QQ群，线下填具体地点 / 填写活动介绍。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "如果有特殊说明比如需要门票啥的要写下。最好留个联系群 / 海报：图片推荐分辨率 886*1200，等比例放大缩小，有照片就可以上传，活动海报不能为空 / 项目负责人(教师/学生)、预估活动规模、管理员1、管理员2（学号或工号、电话）/ 管理员可以手机端发起签到码，也可以手机端代签到代签退",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 23 页 活动申请表单（内嵌图片）",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "activity"
+  },
+  {
+    "id": "card-activity-009",
+    "scene": "报名截止时间、安全预案和审批单有什么要求？",
+    "keywords": [
+      "安全预案300人",
+      "校外30人",
+      "讲座审批单",
+      "7教127",
+      "场地审批单",
+      "安全预案",
+      "安全预案要多少人",
+      "报名截止",
+      "审批单",
+      "场地",
+      "300人",
+      "30人"
+    ],
+    "conclusion": "报名截止时间应在活动开始前；",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "活动区域：校内 / 校外。\n安全预案：百度找找安全预案写下；校内300人以上，校外30人以上必须上传安全预案。\n宣传部讲座审批单：若无此项审批单，则活动需由本组织所在指导单位负责人进行审批。\n宣传物品审批单：1、普通教室，找指导老师去借，具体咨询社管，然后放上来。（学校1天内就会审批好）2、7教127，有时候会显示审批中，直接截图就行 3、其他什么活动室、科技馆等非常规的，确保场地能用情况下，截图上传就行。\n场地审批单（必填）",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 24 页 活动申请表单（内嵌图片）",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "activity"
+  },
+  {
+    "id": "card-activity-010",
+    "scene": "审批通过后怎么拿到报名二维码？",
+    "keywords": [
+      "报名二维码",
+      "下载二维码",
+      "审批通过立即显示",
+      "审批通过",
+      "二维码",
+      "下载",
+      "手机端"
+    ],
+    "conclusion": "3. 审批通过即可下载报名二维码（一般推文可放也可不放，影响不大）审批通过立即显示在二课手机端",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 25 页 报名二维码",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "activity"
+  },
+  {
+    "id": "card-activity-011",
+    "scene": "活动什么时候自动完结？流程怎么算走完？",
+    "keywords": [
+      "自动完结",
+      "一个月自动完结",
+      "活动流程全部完成",
+      "18:30提醒",
+      "完结",
+      "30天",
+      "审核通过",
+      "校团委",
+      "提醒"
+    ],
+    "conclusion": "8. 等待校团委教师审核通过，活动流程全部完成（一个月自动完结）",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "活动结束 30 天未完结将自动完结，公众号 18：30 提醒；活动待完结，每周一早上 8 点提醒完结",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 32 页 校团委教师审核 + 《院二课中心负责人培训会 PPT》（2025-10-13）· 第 21 页 校园文化活动前提须知表",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "activity"
+  },
+  {
+    "id": "card-activity-012",
+    "scene": "二课有哪些消息提醒？",
+    "keywords": [
+      "消息提醒",
+      "18:30",
+      "每周一早上8点",
+      "违约记录提醒",
+      "公众号",
+      "8点",
+      "违约",
+      "审核意见"
+    ],
+    "conclusion": "消息提醒：关注青春杭电第二课堂公众号，可收到消息提醒。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "活动结束 30 天未完结将自动完结，公众号 18：30 提醒；活动待完结，每周一早上 8 点提醒完结；违约记录会提醒；每天早上 8 点提醒报名同学参加活动；活动审核意见会提醒。",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 21 页 校园文化活动前提须知表",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "activity"
+  },
+  {
+    "id": "card-checkin-001",
+    "scene": "现场怎么发起签到签退？（手机端签到码）",
+    "keywords": [
+      "签到码30s",
+      "活动发起",
+      "签退码15min后",
+      "代签到代签退",
+      "签到码有效多久",
+      "签到码有效时长",
+      "生成一次签到码",
+      "签到码",
+      "签退码",
+      "30s",
+      "15min",
+      "管理员"
+    ],
+    "conclusion": "4.1 签到环节方法一 : 手机端现场签到签退（生成一次签到码，有效时长 30s）",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "管理员 1 和管理员 2 都可以在二课手机端“活动发起”发起签到签退；生成签到码 15min 后可以生成签退码。没及时签到签退的，管理员 1 和管理员 2 可以点进去代签到 / 代签退",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 27 页 签到环节方法一",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "checkin_ops"
+  },
+  {
+    "id": "card-checkin-002",
+    "scene": "可以用文档收集学号姓名再导入吗？",
+    "keywords": [
+      "扫码填学号",
+      "文档收集名单",
+      "不能全部后期代签",
+      "文档",
+      "学号",
+      "姓名",
+      "导入",
+      "现场签到"
+    ],
+    "conclusion": "4.2 签到环节方法二 : 建个文档，同学扫码填写学号，姓名，直接在电脑端总结页面导入也可以。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "活动要尽量现场签到签退，不能把全部人都后期代签到、代签退",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 28 页 签到环节方法二 / 三 / 四",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "checkin_ops"
+  },
+  {
+    "id": "card-checkin-003",
+    "scene": "动态二维码怎么用？多久更新一次？",
+    "keywords": [
+      "动态码",
+      "动态二维码",
+      "5分钟自动更新",
+      "5分钟",
+      "活动发起"
+    ],
+    "conclusion": "4.3 签到环节方法三：活动发起 —— 点开具体活动 —— 点击动态码，即可获取动态二维码（自动更新时间为 5 分钟）",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 28 页 签到环节方法二 / 三 / 四",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "checkin_ops"
+  },
+  {
+    "id": "card-checkin-004",
+    "scene": "大型活动可以用人脸签到吗？",
+    "keywords": [
+      "人脸签到",
+      "活动码签到",
+      "借设备",
+      "大型活动",
+      "人脸",
+      "活动码",
+      "设备"
+    ],
+    "conclusion": "4.4 签到环节方法四：人脸签到 / 活动码签到（需提前向二课借设备）（大型活动使用）",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 28 页 签到环节方法二 / 三 / 四",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "checkin_ops"
+  },
+  {
+    "id": "card-checkin-005",
+    "scene": "社长可以在活动后期代签到代签退吗？",
+    "keywords": [
+      "后期代签到",
+      "直接导入名单",
+      "社长代签",
+      "代签到",
+      "代签退",
+      "后期",
+      "导入名单",
+      "社长"
+    ],
+    "conclusion": "5. （选用）社长也可在后期代签到代签退，或者直接导入名单。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "活动要尽量现场签到签退，不能把全部人都后期代签到、代签退",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 29 页 代签到代签退 + 《院二课中心负责人培训会 PPT》（2025-10-13）· 第 28 页 签到环节方法二 / 三 / 四",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "checkin_ops"
+  },
+  {
+    "id": "card-checkin-006",
+    "scene": "活动总结什么时候做？没报名来参与的人能补录吗？",
+    "keywords": [
+      "活动总结",
+      "一周内完成总结",
+      "补录没报名",
+      "工作时长1.5",
+      "1.5h错误",
+      "总结",
+      "一周",
+      "补录",
+      "工作时长",
+      "角色",
+      "观众",
+      "参赛者",
+      "工作人员"
+    ],
+    "conclusion": "6. 活动总结。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "应在活动结束一周内完成导入、总结。如需补录没报名来参与的人员，只需在这导入即可。\n注：工作时长不加单位，正确格式：1.5；错误格式：1.5h。角色： “观众”“参赛者”“工作人员”",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 30 页 活动总结",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "checkin_ops"
+  },
+  {
+    "id": "card-checkin-007",
+    "scene": "电脑端活动总结要注意什么？",
+    "keywords": [
+      "电脑端总结",
+      "补录名单显示不出来",
+      "点击提交",
+      "电脑端",
+      "总结",
+      "补录名单",
+      "提交",
+      "二课工作人员"
+    ],
+    "conclusion": "7. 电脑端进行活动总结（应在活动结束一周内完成总结）注意：请确认好补录的名单都显示出来了，如果不在，出问题，先找二课工作人员，最后点击提交即可！",
+    "steps": null,
+    "materials": null,
+    "location": "二课工作人员",
+    "notes": null,
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 31 页 电脑端活动总结",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "checkin_ops"
+  },
+  {
+    "id": "card-checkin-008",
+    "scene": "活动补录有哪些角色？工作时长怎么填？",
+    "keywords": [
+      "角色观众参赛者工作人员",
+      "工作时长格式",
+      "不加单位",
+      "角色",
+      "工作时长",
+      "格式",
+      "观众",
+      "参赛者",
+      "工作人员"
+    ],
+    "conclusion": "注：工作时长不加单位，正确格式：1.5；",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "错误格式：1.5h。角色： “观众”“参赛者”“工作人员”",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 30 页 活动总结",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "checkin_ops"
+  },
+  {
+    "id": "card-eval-001",
+    "scene": "班级管理员怎么做班团考评？（步骤 1-4）",
+    "keywords": [
+      "班团考评",
+      "班级管理员",
+      "团学组织架构",
+      "核对辅导员",
+      "班团",
+      "考评",
+      "管理员",
+      "组织架构",
+      "辅导员"
+    ],
+    "conclusion": "班级管理员需操作流程如下：",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "1.PC 端登录二课系统： https://erke.hdu.edu.cn/"
+      },
+      {
+        "key": "s2",
+        "text": "2. 打开团学组织架构 —— 班团组织"
+      },
+      {
+        "key": "s3",
+        "text": "3. 自动显示自己班级，核对辅导员和学生负责人是否正确。（如误，请进二课班团群反馈）"
+      },
+      {
+        "key": "s4",
+        "text": "4. 点击右边查看"
+      }
+    ],
+    "materials": null,
+    "location": "二课班团群（信息有误时反馈）",
+    "notes": null,
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 16 页 班团考评步骤 1-4",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "class_eval"
+  },
+  {
+    "id": "card-eval-002",
+    "scene": "班团考评步骤 5-8 是什么？",
+    "keywords": [
+      "选择对应学期",
+      "添加任命职位",
+      "批量导入任命与考核",
+      "下载模板",
+      "班团考评怎么下载模板",
+      "学期",
+      "任命",
+      "职位",
+      "批量导入",
+      "模板"
+    ],
+    "conclusion": "5. 选择对应学期，一般班级同学数据都在（如无，请进二课班团群反馈）",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "6. 在后续发布考评通知时对应同学后面添加任命职位"
+      },
+      {
+        "key": "s2",
+        "text": "7. 点击有职务，后续在发布考评通知后批量导入任命与考核"
+      },
+      {
+        "key": "s3",
+        "text": "8. 下载模板"
+      }
+    ],
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 17 页 班团考评步骤 5-8",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "class_eval"
+  },
+  {
+    "id": "card-eval-003",
+    "scene": "班团考评步骤 9-12 是什么？",
+    "keywords": [
+      "考核结果优秀良好合格不合格",
+      "微信链接审核",
+      "辅导员审核",
+      "模板",
+      "考核结果",
+      "优秀",
+      "良好",
+      "合格",
+      "不合格",
+      "链接",
+      "微信",
+      "辅导员"
+    ],
+    "conclusion": "9. 模板自动生成姓名等信息，班级管理员只需填写考核结果（优秀、良好、合格、不合格）",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "11. 复制链接，微信发给辅导员审核（链接只能通过微信打开）。"
+      },
+      {
+        "key": "s2",
+        "text": "12. 如图"
+      }
+    ],
+    "materials": null,
+    "location": null,
+    "notes": "注：辅导员账号可登录二课系统批量审核各个班，具体咨询二课工作人员，但建议使用微信链接审核。",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 18 页 班团考评步骤 9-12",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "class_eval"
+  },
+  {
+    "id": "card-eval-004",
+    "scene": "班团考评步骤 13-16 是什么？",
+    "keywords": [
+      "辅导员同意拒绝",
+      "我的组织我的成绩单",
+      "每学期末通知",
+      "以本系统为准",
+      "辅导员",
+      "链接",
+      "同意",
+      "拒绝",
+      "我的组织",
+      "成绩单",
+      "班团群",
+      "每学期末"
+    ],
+    "conclusion": "13. 辅导员点开链接，确认任命和考评结果，同意即成功，拒绝则结果有误，班级负责人需重新修改上传。",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "14. 班级负责人告知班委，本学期班委职位和考评已录在二课系统上，班委可从青春杭电第二课堂公众号进入，点击我的组织或我的成绩单查询。"
+      },
+      {
+        "key": "s2",
+        "text": "15. 如有任何二课系统技术性问题，请进入二课班团群咨询工作人员。（如群变更，公众号下方有群号）"
+      },
+      {
+        "key": "s3",
+        "text": "16. 每学期末会通知到各学院团委，请各班团支部做好录入工作。所有学生干部任职与考评数据以本系统为准。"
+      }
+    ],
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 19 页 班团考评步骤 13-16",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "class_eval"
+  },
+  {
+    "id": "card-eval-005",
+    "scene": "任命与考评的时间窗口是什么时候？",
+    "keywords": [
+      "上传新学期社团成员",
+      "任命考评时间窗",
+      "8月份2月份关闭",
+      "考评权限",
+      "任命",
+      "考评",
+      "时间窗",
+      "8月",
+      "2月",
+      "权限",
+      "学期"
+    ],
+    "conclusion": "每学期末，二课会在公众号及各相关通知群通知将开启全校学生干部的任命与考评，包括校院团委、校院学生会、各社团、各班团。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "所有的任命 + 考评以学期（如 2023-2024-2 呈现），系统在发布正式通知后会开启任命与考核的权限，关闭时间大致在每年 8 月份及 2 月份，后续无法进行任命、考核等操作。所有学生组织的加分只以二课成绩单形式呈现。班团组织由于数据复杂，需要各院二课负责协调，在考评开始前负责梳理好各班级的权限关系。",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 7 页 负责人职责 / 班团组织 + 《答疑群聊天记录分析报告 v1.0》· Q7",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "class_eval"
+  },
+  {
+    "id": "card-eval-006",
+    "scene": "院二课中心负责人有哪些职责？",
+    "keywords": [
+      "负责人职责",
+      "活动申报",
+      "推进成绩单",
+      "GPA数据",
+      "负责人",
+      "职责",
+      "申报",
+      "成绩单",
+      "奖项",
+      "荣誉",
+      "GPA"
+    ],
+    "conclusion": "2、团学的各项活动需在二课上申报。",
+    "steps": [
+      {
+        "key": "s1",
+        "text": "3、推进第二课堂成绩单。收集以本学院为主办单位或组织的各类学生奖项或荣誉名单录入杭电第二课堂成绩单。如：院辩论赛获奖名单、院十佳笔记、院十佳歌手、院荣誉寝室、院荣誉称号、学院主办的 ab 类校级竞赛等。如管理学院的电子商务竞赛校级名单、自动化学院生命科学竞赛校级名单等。省级直接以教务处 GPA 数据为准，所以需要各学院校院级数据。未来展望：未来学校部门间数据会联通，院二课就只需要收集思想及文化类的获奖即可"
+      }
+    ],
+    "materials": null,
+    "location": null,
+    "notes": "如，寒实评选、迎新晚会、辩论赛观众、十佳歌手、各项学院讲座。需与学院辅导员及团委书记积极沟通，建立校园活动平台。原则上，使用二课系统举办各类活动，可以包含（观众、参赛者、工作人员），所以院级各类活动证明应直接使用二课成绩单，降低公章使用频率。",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 8 页 负责人职责",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "class_eval"
+  },
+  {
+    "id": "card-eval-007",
+    "scene": "二课中心的组织机构是怎么设置的？",
+    "keywords": [
+      "校二课中心",
+      "院二课中心",
+      "组织机构",
+      "青春杭电第二课堂管理中心",
+      "校团委",
+      "团学"
+    ],
+    "conclusion": "各院第二课堂学生负责人；",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "组织机构：校团委“青春杭电”第二课堂管理中心 简称：校二课中心；各学院组织机构一般为：“青春 ** ”第二课堂管理中心 简称： ** 学院二课中心；如：“青春管院”第二课堂管理中心 简称：管理学院二课中心。工作量不大一般由院团学部门兼任负责人。",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 7 页 负责人职责 / 班团组织",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "class_eval"
+  },
+  {
+    "id": "card-eval-008",
+    "scene": "成绩单作为讲座证明材料有什么建议？",
+    "keywords": [
+      "讲座证明材料",
+      "班委考评与参与活动",
+      "二课成绩单作为证明",
+      "讲座",
+      "证明材料",
+      "班委",
+      "考评",
+      "成绩单"
+    ],
+    "conclusion": "考虑到学院举办活动需要人力参与的情况，可以将班委考评与参与活动相结合；",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "也可以将第二课堂系统上记录的本学院组织的活动和非本学院组织的活动，按照一定比例进行计算，在两者中寻找平衡点，以不打击同学们参与活动的积极性。各学院尽量将讲座活动信息在第二课堂系统申报，建议使用二课成绩单作为讲座证明材料。",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 9 页 注意须知",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "class_eval"
+  },
+  {
+    "id": "card-entrance-001",
+    "scene": "二课系统的入口在哪？",
+    "keywords": [
+      "系统入口",
+      "erke.hdu.edu.cn",
+      "青春杭电第二课堂",
+      "PC端入口",
+      "入口",
+      "PC",
+      "公众号",
+      "网址",
+      "登录"
+    ],
+    "conclusion": "PC 端入口： https://erke.hdu.edu.cn/ （老师、学生管理员端）",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "手机端入口：微信公众号 “ 青春杭电第二课堂 ” （大众用户端）“青春杭电”第二课堂公众号 / 青春杭电公众号",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 3 页 系统入口",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "entrance"
+  },
+  {
+    "id": "card-entrance-002",
+    "scene": "第二课堂成绩单制度有哪些文件依据？",
+    "keywords": [
+      "中青联发2020 7号",
+      "中青联发2018 5号",
+      "制度文件",
+      "政策依据",
+      "文件",
+      "依据",
+      "中青联发",
+      "成绩单制度",
+      "gqt.org.cn"
+    ],
+    "conclusion": "《深化学校共青团改革的若干措施》（中青联发〔2020〕7 号）",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "《关于在高校实施共青团“第二课堂成绩单”制度的意见》（中青联发〔2018〕5 号）\nhttps://www.gqt.org.cn/documents/zqlf/201807/P020180704438215264881.pdf",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 6 页 第二课堂成绩单制度文件",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "entrance"
+  },
+  {
+    "id": "card-entrance-003",
+    "scene": "答疑群 / 班团群群号是多少？公众号菜单在哪？",
+    "keywords": [
+      "普通学生用户群",
+      "班长团支书班团群",
+      "884621095",
+      "383122602",
+      "第二课堂菜单",
+      "群号",
+      "答疑群",
+      "班团群",
+      "菜单",
+      "公众号"
+    ],
+    "conclusion": "普通学生用户群:884621095；",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "班长/团支书班团群:383122602。公众号底部菜单：第二课堂 / 答疑群 / 活动合作。",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 34 页 公众号界面（内嵌图片）（第 33-34 页内嵌公众号界面截图）",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "entrance"
+  },
+  {
+    "id": "card-entrance-004",
+    "scene": "公众号首页有哪些功能入口？",
+    "keywords": [
+      "团学组织",
+      "志愿活动",
+      "劳动学分",
+      "精彩回顾",
+      "正在报名",
+      "公众号",
+      "功能",
+      "入口"
+    ],
+    "conclusion": "青春杭电：团学组织 / 社会实践 / 志愿活动 / 劳动学分；",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "精彩回顾；正在报名 / 热门活动。",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 34 页 公众号界面（内嵌图片）（第 33-34 页内嵌公众号界面截图）",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "entrance"
+  },
+  {
+    "id": "card-entrance-005",
+    "scene": "二课系统技术性问题去哪咨询？",
+    "keywords": [
+      "技术性问题",
+      "二课班团群",
+      "群变更",
+      "技术",
+      "咨询",
+      "班团群",
+      "群号"
+    ],
+    "conclusion": "如有任何二课系统技术性问题，请进入二课班团群咨询工作人员。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "（如群变更，公众号下方有群号）",
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 19 页 班团考评步骤 13-16",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "entrance"
+  },
+  {
+    "id": "card-principle-001",
+    "scene": "我的问题应该问谁？",
+    "keywords": [
+      "找谁",
+      "问谁",
+      "该问哪个老师",
+      "分流",
+      "问错人",
+      "社管",
+      "综测",
+      "辅导员"
+    ],
+    "conclusion": "社团有关问社管，综测绩点加分有关问班助和辅导员，只有二课有关才问我们。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 九 通用工作原则 + 需求分析大纲 F04",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "principles"
+  },
+  {
+    "id": "card-principle-002",
+    "scene": "补签可以不带材料直接办吗？",
+    "keywords": [
+      "无材料补签",
+      "补签纪律",
+      "补录找主办方",
+      "补签",
+      "材料",
+      "到场证明",
+      "纪律"
+    ],
+    "conclusion": "补签尽量索要到场证明留存，不可以无材料随意补签；",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": "已报名走补签，未报名不能补，补录找主办方。",
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 九 通用工作原则",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "principles"
+  },
+  {
+    "id": "card-principle-003",
+    "scene": "能承诺人工恢复信誉分吗？",
+    "keywords": [
+      "人工恢复信誉分",
+      "承诺恢复",
+      "严禁承诺",
+      "信誉分",
+      "人工",
+      "恢复",
+      "承诺",
+      "重置"
+    ],
+    "conclusion": "严禁向学生承诺人工恢复信誉分，信誉分只能每月自动重置。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 九 通用工作原则",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "principles"
+  },
+  {
+    "id": "card-principle-004",
+    "scene": "学分认定谁说了算？",
+    "keywords": [
+      "不做最终判定",
+      "社团只做解释",
+      "谁说了算",
+      "学分",
+      "判定",
+      "社团",
+      "解释",
+      "班助",
+      "辅导员"
+    ],
+    "conclusion": "劳动学分、创新学分、校级讲座、活动上限，社团只做解释，不做最终判定，建议咨询班助和辅导员。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 九 通用工作原则",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "principles"
+  },
+  {
+    "id": "card-principle-005",
+    "scene": "手册覆盖不到的新问题怎么处理？",
+    "keywords": [
+      "新问题",
+      "记录问题",
+      "补充到手册",
+      "F07",
+      "记录",
+      "手册",
+      "补充",
+      "迭代"
+    ],
+    "conclusion": "遇到手册模板覆盖不到的新问题，记录问题和处理方式，可咨询部门，后续补充到手册。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《二课答疑手册》· 九 通用工作原则 + 需求分析大纲 F07",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "principles"
+  },
+  {
+    "id": "card-principle-006",
+    "scene": "二课成绩单的最终目标是什么？",
+    "keywords": [
+      "最终目标",
+      "培养计划融合",
+      "成绩单",
+      "培养计划"
+    ],
+    "conclusion": "最终目标：杭电第二课堂成绩单融入学生第二课堂，并与学生培养计划融合。",
+    "steps": null,
+    "materials": null,
+    "location": null,
+    "notes": null,
+    "scoreRows": null,
+    "source": "《院二课中心负责人培训会 PPT》（2025-10-13）· 第 10 页 最终目标",
+    "updatedAt": "2026-11-04",
+    "status": "reviewed",
+    "category": "principles"
+  }
+];
+
+(function () {
+  'use strict';
+
+  // ===== 0. 常量：仅界面标签 / 运行提示 / 免责声明，不含任何二课答案事实 =====
+  var KEY_TODO = 'erke.qa.todo.v1';
+  var KEY_FAV = 'erke.qa.fav.v1';
+  var QUICK_COUNT = 5;
+  var EXIT_FALLBACK_MS = 250;
+  var FUZZY_MIN_RATIO = 0.7;
+  var FALLBACK = '知识库暂未收录，建议咨询辅导员或校团委。';
+  var DISCLAIMER = '本页内容来自知识库转录，仅供办事指引参考，最终以学校官方通知、学院与辅导员口径为准。';
+  var ENGINE_NOTE = '本产品为纯规则匹配 + 模板渲染，不接入任何大模型或外部接口；断网状态下仍可完成查询。';
+
+  // 动效偏好：实时监听，系统设置中途切换也能生效
+  var MQ = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+  var REDUCED = MQ ? MQ.matches : false;
+  if (MQ) {
+    if (MQ.addEventListener) MQ.addEventListener('change', function (e) { REDUCED = e.matches; });
+    else if (MQ.addListener) MQ.addListener(function (e) { REDUCED = e.matches; });
+  }
+
+  var VIEWS = ['home', 'result', 'todo', 'fav', 'about'];
+  var state = { cards: [], todo: [], fav: [], current: null, lastSceneId: null, guideKey: null, view: null };
+  var jumpTimer = null;
+
+  // ===== 1. 工具：所有文本用 textContent 写入；null / 空值一律不生成节点 =====
+  function $(s) { return document.querySelector(s); }
+  function $$(s) { return Array.prototype.slice.call(document.querySelectorAll(s)); }
+  function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); }
+  function has(v) {
+    if (v === null || v === undefined) return false;
+    if (typeof v === 'string') {
+      var t = v.trim();
+      return t !== '' && t !== 'null' && t !== 'undefined' && t !== 'NaN';
+    }
+    if (Array.isArray(v)) return v.length > 0;
+    return true;
+  }
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (has(text)) n.textContent = String(text);  // null 不会变成 "null" 字样
+    return n;
+  }
+  function setClass(node, cls, on) {
+    if (on) node.classList.add(cls); else node.classList.remove(cls);
+  }
+  function findCard(id) {
+    for (var i = 0; i < state.cards.length; i++) if (state.cards[i].id === id) return state.cards[i];
+    return null;
+  }
+
+  // ===== 2. 安全存储 Store：localStorage → sessionStorage → 内存 三级优雅降级 =====
+  // 设计目标：任何浏览器环境（file:// 双击打开、无痕 / 隐私模式、存储被禁用）下都
+  // 绝不抛错、不中断程序；所有持久化（待办 / 收藏）统一经过本工具，调用方无需关心降级细节。
+  var Store = (function () {
+    var mem = {};                                   // 内存兜底：纯 JS 全局对象
+    // 探测某后端是否真的可写（部分浏览器访问 storage 或 setItem 会直接抛 SecurityError / QuotaExceededError）
+    function canUse(kind) {
+      try {
+        if (kind === 'local') { var l = window.localStorage; l.setItem('__erke__t', '1'); l.removeItem('__erke__t'); return true; }
+        if (kind === 'session') { var s = window.sessionStorage; s.setItem('__erke__t', '1'); s.removeItem('__erke__t'); return true; }
+        return true;                                // 内存兜底一定可用
+      } catch (e) { return false; }
+    }
+    // 某些沙箱环境连访问 window.localStorage 本身都会抛错，因此访问也要保护
+    function has(kind) { try { return !!window[kind === 'local' ? 'localStorage' : 'sessionStorage']; } catch (e) { return false; } }
+
+    var order = [];                                 // 降级顺序：local -> session -> memory
+    if (has('local')) order.push('local');
+    if (has('session')) order.push('session');
+    order.push('memory');                           // 永远存在，作为最后兜底
+
+    // 初始化时跳过明显不可用的后端
+    var idx = 0;
+    while (idx < order.length && !canUse(order[idx])) idx++;
+    if (idx >= order.length) idx = order.length - 1;
+
+    function rawGet(kind, key) {
+      if (kind === 'local') return window.localStorage.getItem(key);
+      if (kind === 'session') return window.sessionStorage.getItem(key);
+      return Object.prototype.hasOwnProperty.call(mem, key) ? mem[key] : null;
+    }
+    function rawSet(kind, key, value) {
+      if (kind === 'local') { window.localStorage.setItem(key, value); return; }
+      if (kind === 'session') { window.sessionStorage.setItem(key, value); return; }
+      mem[key] = value;
+    }
+    function rawRemove(kind, key) {
+      if (kind === 'local') { window.localStorage.removeItem(key); return; }
+      if (kind === 'session') { window.sessionStorage.removeItem(key); return; }
+      delete mem[key];
+    }
+
+    // 运行时若当前后端突然失效，自动向下一个后端降级（idx 前移，失败不再重试坏后端）
+    function get(key) {
+      for (var j = idx; j < order.length; j++) {
+        try { return rawGet(order[j], key); } catch (e) { idx = j + 1; }
+      }
+      return null;
+    }
+    function set(key, value) {
+      for (var j = idx; j < order.length; j++) {
+        try { rawSet(order[j], key, value); idx = j; return true; } // 成功后锁定到可用后端
+        catch (e) { /* 该后端不可用，继续降级 */ }
+      }
+      return false;
+    }
+
+    return {
+      getMode: function () { return order[idx]; },                  // 'local' | 'session' | 'memory'
+      isPersistent: function () { return order[idx] === 'local'; }, // 仅 local 能跨刷新保留
+      get: get,
+      set: set,
+      getJSON: function (key, fallback) {
+        try {
+          var raw = get(key);
+          if (raw == null) return (fallback === undefined ? null : fallback);
+          var p = JSON.parse(raw);
+          return (p === null || p === undefined) ? fallback : p;
+        } catch (e) { return fallback; }
+      },
+      setJSON: function (key, value) { return set(key, JSON.stringify(value)); },
+      remove: function (key) { try { rawRemove(order[idx], key); } catch (e) {} }
+    };
+  })();
+
+  // 轻量 Toast：屏幕底部居中，2 秒自动消失；pointer-events:none 保证不阻挡卡片点击与滚动
+  var toastTimer = null;
+  function showToast(msg) {
+    var t = $('#toast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('is-show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove('is-show'); }, 2000);
+  }
+
+  // 读取已存 id 数组（待办 / 收藏），统一走 Store（过滤掉已被精简下线的卡片）
+  function loadIds(key) {
+    var v = Store.getJSON(key, []);
+    if (!Array.isArray(v)) return [];
+    var out = [];
+    for (var i = 0; i < v.length; i++) if (typeof v[i] === 'string' && findCard(v[i])) out.push(v[i]);
+    return out;
+  }
+
+  // ===== 3. 意图匹配：关键词打分 + 场景二元组覆盖率兜底 =====
+  function normalize(s) {
+    return String(s || '').toLowerCase().replace(/[^\u4e00-\u9fa5a-z0-9]/g, '');
+  }
+  function gramsOf(s) {
+    var out = [], seen = {};
+    for (var i = 0; i + 2 <= s.length; i++) {
+      var g = s.slice(i, i + 2);
+      if (!seen[g]) { seen[g] = 1; out.push(g); }
+    }
+    return out;
+  }
+  function scoreCard(card, q) {
+    var score = 0, kws = Array.isArray(card.keywords) ? card.keywords : [];
+    for (var i = 0; i < kws.length; i++) {
+      var k = normalize(kws[i]);
+      if (!k) continue;
+      if (q.indexOf(k) !== -1) score += k.length + 2;
+      else if (q.length >= 2 && k.indexOf(q) !== -1) score += 1;
+    }
+    if (normalize(card.scene) === q) score += 20;
+    return score;
+  }
+  function match(q) {
+    var nq = normalize(q);
+    if (nq.length < 2) return { hit: null, ties: [] };
+    var grams = gramsOf(nq);
+    var ranked = state.cards.map(function (c) {
+      var scene = normalize(c.scene || ''), shared = 0;
+      for (var i = 0; i < grams.length; i++) if (scene.indexOf(grams[i]) !== -1) shared++;
+      return { card: c, kw: scoreCard(c, nq), shared: shared,
+               ratio: grams.length ? shared / grams.length : 0 };
+    });
+    var kwRanked = ranked.filter(function (r) { return r.kw > 0; })
+      .sort(function (a, b) { return (b.kw - a.kw) || (b.shared - a.shared); });
+    if (kwRanked.length) {
+      var top = kwRanked[0];
+      var best = kwRanked.filter(function (r) { return r.kw === top.kw && r.shared === top.shared; });
+      if (best.length === 1) return { hit: top.card, ties: [] };
+      // 卡片数增多后同分常见：先按「问法 vs 场景」二元组覆盖率裁决，实在分不出才给推荐
+      best.sort(function (a, b) {
+        return (b.ratio - a.ratio) || (b.shared - a.shared) ||
+               (a.card.scene.length - b.card.scene.length);
+      });
+      if (best[0].ratio > best[1].ratio + 0.0001 || best[0].shared > best[1].shared)
+        return { hit: best[0].card, ties: [] };
+      return { hit: null, ties: best.slice(0, 6).map(function (r) { return r.card; }) };
+    }
+    if (grams.length < 3) return { hit: null, ties: [] };
+    var fuzzy = ranked.filter(function (r) { return r.ratio >= FUZZY_MIN_RATIO; })
+      .sort(function (a, b) { return (b.ratio - a.ratio) || (b.shared - a.shared); });
+    if (fuzzy.length && (fuzzy.length === 1 || fuzzy[0].ratio > fuzzy[1].ratio)) {
+      return { hit: fuzzy[0].card, ties: [] };
+    }
+    return { hit: null, ties: [] };
+  }
+
+  // ===== 4. 渲染基础：null 字段整块跳过（Schema §4 规则 1）=====
+  // 模块顺序与首屏副标题「结论 · 下一步 · 去哪办 · 带什么 · 注意什么」一致
+  var BLOCKS = [
+    { label: '一句话结论', key: 'conclusion', kind: 'text', variant: 'lead' },
+    { label: '适用场景', key: 'scene', kind: 'text' },
+    { label: '下一步怎么做', key: 'steps', kind: 'steps' },
+    { label: '去哪办 / 找谁', key: 'location', kind: 'text' },
+    { label: '要带什么', key: 'materials', kind: 'list' },
+    { label: '注意什么', key: 'notes', kind: 'text' },
+    { label: '赋分标准速查', key: 'scoreRows', kind: 'list', variant: 'score' },
+    { label: '规则来源与更新时间', kind: 'meta' }
+  ];
+  function section(label, variant) {
+    var s = el('section', 'block' + (variant ? ' block--' + variant : ''));
+    s.appendChild(el('h2', 'block__title', label));
+    return s;
+  }
+  function textBlock(label, value, variant) {
+    if (!has(value)) return null;
+    var s = section(label, variant);
+    s.appendChild(el('p', 'block__text', value));
+    return s;
+  }
+  function listBlock(label, value, variant) {
+    if (!Array.isArray(value)) return null;
+    var items = value.filter(has);
+    if (!items.length) return null;
+    var s = section(label, variant), ul = el('ul', 'materials');
+    items.forEach(function (v) { ul.appendChild(el('li', null, v)); });
+    s.appendChild(ul); return s;
+  }
+  function metaBlock(label, card) {
+    var rows = [];
+    if (has(card.source)) rows.push(['知识来源', card.source]);
+    if (has(card.updatedAt)) rows.push(['更新时间', card.updatedAt]);
+    if (!rows.length) return null;
+    var s = section(label, 'meta'), dl = el('dl', 'meta');
+    rows.forEach(function (p) {
+      var row = el('div', 'meta__row');
+      row.appendChild(el('dt', 'meta__key', p[0]));
+      row.appendChild(el('dd', 'meta__val', p[1]));
+      dl.appendChild(row);
+    });
+    s.appendChild(dl); return s;
+  }
+
+  // ===== 5. 步骤展开 / 收起 =====
+  function toggleStep(li, note) {
+    if (li.classList.contains('is-expanded')) {
+      li.classList.remove('is-expanded');
+      if (REDUCED) { note.hidden = true; return; }
+      var done = false;
+      var onEnd = function (e) {
+        if (e.target === note && e.propertyName === 'opacity') finish();
+      };
+      var finish = function () {
+        if (done) return;
+        done = true;
+        note.removeEventListener('transitionend', onEnd);
+        if (!li.classList.contains('is-expanded')) note.hidden = true;
+      };
+      note.addEventListener('transitionend', onEnd);
+      window.setTimeout(finish, EXIT_FALLBACK_MS);
+    } else {
+      note.hidden = false;
+      void note.offsetWidth;
+      li.classList.add('is-expanded');
+    }
+  }
+  function stepsBlock(label, value) {
+    if (!Array.isArray(value)) return null;
+    var steps = value.filter(function (s) { return s && has(s.text); });
+    if (!steps.length) return null;
+    var sec = section(label), ol = el('ol', 'steps');
+    steps.forEach(function (st) {
+      var li = el('li', 'step'), body = el('div', 'step__body'), row = el('div', 'step__row');
+      row.appendChild(el('p', 'step__text', st.text));
+      body.appendChild(row); li.appendChild(body);
+      if (has(st.note)) {
+        li.classList.add('is-expandable');
+        li.setAttribute('data-press', '');
+        li.setAttribute('role', 'button');
+        li.setAttribute('tabindex', '0');
+        var arrow = el('span', 'step__arrow');
+        arrow.setAttribute('aria-hidden', 'true');
+        row.appendChild(arrow);
+        var note = el('p', 'step__note', st.note);
+        note.hidden = true;
+        body.appendChild(note);
+        (function (li, note) {
+          var fn = function () { toggleStep(li, note); };
+          li.addEventListener('click', fn);
+          li.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(); }
+          });
+        })(li, note);
+      }
+      ol.appendChild(li);
+    });
+    sec.appendChild(ol); return sec;
+  }
+
+  // ===== 6. 结果卡：事实文案静态呈现，不做任何入场动效 =====
+  function renderBlock(b, card) {
+    if (b.kind === 'meta') return metaBlock(b.label, card);
+    if (b.kind === 'text') return textBlock(b.label, card[b.key], b.variant);
+    if (b.kind === 'steps') return stepsBlock(b.label, card[b.key]);
+    if (b.kind === 'list') return listBlock(b.label, card[b.key], b.variant);
+    return null;
+  }
+  function renderCard(card) {
+    var box = $('#result'); clear(box);
+    var article = el('article', 'card');
+    BLOCKS.forEach(function (b) { var n = renderBlock(b, card); if (n) article.appendChild(n); });
+    box.appendChild(article);
+    syncActions(card);
+  }
+
+  // ===== 7. 待办 / 收藏 =====
+  function setToggle(btn, cls, on, onText, offText) {
+    setClass(btn, cls, on);
+    btn.querySelector('.act__label').textContent = on ? onText : offText;
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  }
+  function syncActions(card) {
+    state.current = card;
+    setToggle($('#btn-todo'), 'is-checked', state.todo.indexOf(card.id) !== -1, '已加入待办', '加入待办');
+    setToggle($('#btn-fav'), 'is-active', state.fav.indexOf(card.id) !== -1, '已收藏', '收藏');
+    $('#result-actions').hidden = false;
+  }
+  function updateBadges() {
+    [['#todo-count', state.todo.length], ['#fav-count', state.fav.length]].forEach(function (p) {
+      var n = $(p[0]);
+      n.textContent = p[1] ? String(p[1]) : '';
+      n.hidden = !p[1];
+    });
+  }
+  // 加入待办 / 收藏：统一走 Store（永不抛错，失败自动降级）；仅在降级模式下给出温和提示
+  function toggleId(kind, btn, cls, onText, offText) {
+    if (!state.current) return;
+    var id = state.current.id;
+    var arr = kind === 'todo' ? state.todo : state.fav;
+    var key = kind === 'todo' ? KEY_TODO : KEY_FAV;
+    var i = arr.indexOf(id);
+    if (i === -1) arr.push(id); else arr.splice(i, 1);
+    Store.setJSON(key, arr);                 // 持久化统一入口，任何环境都不会中断
+    setToggle(btn, cls, i === -1, onText, offText);
+    updateBadges();
+    // 仅当无法持久保存时（隐私 / 本地模式）提示用户，不改变任何功能与数据
+    if (!Store.isPersistent()) showToast('当前处于隐私 / 本地模式，数据仅在本次浏览生效');
+  }
+
+  // ===== 8. 场景胶囊选中态（三处必须动效之一）：同组互斥 =====
+  function clearChips() {
+    $$('.chip.is-active').forEach(function (n) { n.classList.remove('is-active'); });
+  }
+  function selectChip(id) {
+    clearChips();
+    if (!id) return;
+    var view = $('.view:not([hidden])');
+    if (!view) return;
+    void view.offsetWidth;   // 强制一次样式计算，让 opacity:0 成为真实过渡起点
+    var l = view.querySelectorAll('.chip');
+    for (var i = 0; i < l.length; i++) {
+      if (l[i].getAttribute('data-card-id') === id) { l[i].classList.add('is-active'); return; }
+    }
+  }
+
+  // ===== 9. 空状态：一律给推荐场景（标签来自 cardsData 的 scene）=====
+  function chip(card) {
+    var b = el('button', 'chip');
+    b.type = 'button';
+    b.setAttribute('data-press', '');
+    b.setAttribute('data-card-id', card.id);
+    b.appendChild(el('span', null, card.scene));
+    b.addEventListener('click', function () {
+      state.lastSceneId = card.id;
+      selectChip(card.id);
+      if (jumpTimer) window.clearTimeout(jumpTimer);
+      // 让 180ms 的选中淡入先真实播放完再切结果页；减少动效时直接切换
+      if (REDUCED) { navigate('result', { id: card.id }); return; }
+      jumpTimer = window.setTimeout(function () { jumpTimer = null; navigate('result', { id: card.id }); }, 190);
+    });
+    return b;
+  }
+  function stateBox(title, desc, cards) {
+    var box = el('div', 'state__box');
+    box.appendChild(el('p', 'state__title', title));
+    box.appendChild(el('p', 'state__desc', desc));
+    if (cards && cards.length) {
+      var wrap = el('div', 'chips state__chips');
+      cards.forEach(function (c) { wrap.appendChild(chip(c)); });
+      box.appendChild(wrap);
+    }
+    return box;
+  }
+  function showNoHit(container, cards) {
+    container.hidden = false; clear(container);
+    var list = (cards || []).slice(0, 6);
+    container.appendChild(stateBox(FALLBACK,
+      '知识库共收录 ' + state.cards.length + ' 个主题，可以先点一个看看，或换个说法再搜。', list));
+  }
+  // 空状态优先推荐「当前分类」的场景，避免 92 张卡时推荐跑偏
+  function guideCards() {
+    var list = state.cards.filter(function (c) { return c.category === state.guideKey; });
+    return list.length ? list.slice(0, 6) : state.cards.slice(0, QUICK_COUNT);
+  }
+
+  // ===== 10. 列表 / 规则说明 =====
+  function renderList(type) {
+    var ids = type === 'todo' ? state.todo : state.fav;
+    var cards = [];
+    ids.forEach(function (id) {
+      var c = findCard(id);
+      if (c && cards.indexOf(c) === -1) cards.push(c);
+    });
+    var box = type === 'todo' ? $('#todo-list') : $('#fav-list');
+    clear(box);
+    if (!cards.length) {
+      box.appendChild(stateBox(type === 'todo' ? '待办还是空的' : '还没有收藏',
+        '下面是知识库已收录的场景，点一个看看。', state.cards.slice(0, QUICK_COUNT)));
+      return;
+    }
+    var ul = el('ul', 'itemlist');
+    cards.forEach(function (c) {
+      var li = el('li', 'item'), b = el('button', 'item__link');
+      b.type = 'button';
+      b.setAttribute('data-open-id', c.id);
+      b.setAttribute('data-press', '');
+      b.appendChild(el('span', 'item__text', c.scene));
+      b.appendChild(el('span', 'item__arrow', '›'));
+      li.appendChild(b); ul.appendChild(li);
+    });
+    box.appendChild(ul);
+  }
+  function renderAbout() {
+    var box = $('#about'); clear(box);
+    var body = el('div', 'about-body'), sources = [];
+    state.cards.forEach(function (c) {
+      if (has(c.source) && sources.indexOf(c.source) === -1) sources.push(c.source);
+    });
+    if (sources.length) {
+      body.appendChild(el('h3', null, '知识来源'));
+      sources.forEach(function (s) { body.appendChild(el('p', 'about-src', s)); });
+    }
+    var dates = state.cards.map(function (c) { return c.updatedAt; }).filter(has).sort();
+    if (dates.length) {
+      body.appendChild(el('h3', null, '更新时间'));
+      body.appendChild(el('p', null, dates[dates.length - 1]));
+    }
+    body.appendChild(el('h3', null, '收录场景'));
+    body.appendChild(el('p', null, String(state.cards.length) + ' 个已审核主题'));
+    body.appendChild(el('p', null, ENGINE_NOTE));
+    body.appendChild(el('p', 'about-disclaimer', DISCLAIMER));
+    box.appendChild(body);
+  }
+
+  // ===== 11. 视图切换：纯 DOM 事件驱动，禁用 hash / <a> 跳转，兼容微信内置浏览器 =====
+  // navigate 统一控制各区块的 display:none/block（通过 hidden 属性），并触发对应渲染
+  function navigate(name, opts) {
+    opts = opts || {};
+    if (VIEWS.indexOf(name) === -1) name = 'home';
+    // 防连击：同一视图（非结果页带 id）重复点击只回到顶部，不重复渲染
+    if (name === state.view && !opts.id) { window.scrollTo(0, 0); return; }
+    state.view = name;
+    VIEWS.forEach(function (k) { $('#view-' + k).hidden = (k !== name); });
+    $$('.tabbar [data-nav]').forEach(function (b) { setClass(b, 'is-active', b.getAttribute('data-nav') === name); });
+    $('#search-state').hidden = true;
+    if (name === 'result') {
+      var c = findCard(opts.id || '');
+      if (c) renderCard(c);
+      else { $('#result-actions').hidden = true; showNoHit($('#result'), guideCards()); }
+    } else if (name === 'todo' || name === 'fav') renderList(name);
+    else if (name === 'about') renderAbout();
+    if (name === 'home' && state.lastSceneId) selectChip(state.lastSceneId);
+    else clearChips();
+    window.scrollTo(0, 0);
+  }
+  // 搜索入口共用：表单提交与分类关键词按钮走同一条链路
+  function runSearch(q) {
+    var box = $('#search-state');
+    if (!q) { showNoHit(box, guideCards()); return; }
+    var r = match(q);
+    if (r.hit) {
+      box.hidden = true; clear(box);
+      state.lastSceneId = r.hit.id;
+      navigate('result', { id: r.hit.id });
+    } else {
+      showNoHit(box, r.ties.length ? r.ties : guideCards());
+    }
+  }
+  function onSearch(e) { e.preventDefault(); runSearch($('#q').value.trim()); }
+  function clearPressed() {
+    $$('.is-pressed').forEach(function (n) { n.classList.remove('is-pressed'); });
+  }
+  function closestPress(node) {
+    while (node && node.nodeType === 1) {
+      if (node.hasAttribute && node.hasAttribute('data-press')) return node;
+      node = node.parentNode;
+    }
+    return null;
+  }
+  // 向上查找带指定属性的最近祖先，兼容不支持 Element.closest 的旧版微信 WebView
+  function closestAttr(node, attr) {
+    while (node && node.nodeType === 1) {
+      if (node.hasAttribute && node.hasAttribute(attr)) return node;
+      node = node.parentNode;
+    }
+    return null;
+  }
+  function bindEvents() {
+    $('#search-form').addEventListener('submit', onSearch);
+    $('#btn-todo').addEventListener('click', function () {
+      toggleId('todo', $('#btn-todo'), 'is-checked', '已加入待办', '加入待办');
+    });
+    $('#btn-fav').addEventListener('click', function () {
+      toggleId('fav', $('#btn-fav'), 'is-active', '已收藏', '收藏');
+    });
+    // 全局导航委托：所有带 data-nav 的元素（顶栏、返回、底部导航）统一走 navigate，禁用 <a>/hash
+    document.addEventListener('click', function (e) {
+      var t = closestAttr(e.target, 'data-nav');
+      if (!t) return;
+      e.preventDefault();
+      navigate(t.getAttribute('data-nav'));
+    });
+    // 浏览主题（事件委托）：分类胶囊与关键词按钮由父容器统一监听，比逐元素绑定在微信里更稳
+    $('#guide-tabs').addEventListener('click', function (e) {
+      var t = closestAttr(e.target, 'data-tab-key');
+      if (!t) return;
+      state.guideKey = t.getAttribute('data-tab-key');
+      renderGuide();
+    });
+    $('#guide-groups').addEventListener('click', function (e) {
+      var t = closestAttr(e.target, 'data-keyword');
+      if (!t) return;
+      var w = t.getAttribute('data-keyword');
+      $('#q').value = w;          // 回填输入框，返回首页时仍看得到刚才查的词
+      runSearch(w);
+    });
+    // 待办 / 收藏列表项点击打开结果（委托在列表容器上）
+    ['#todo-list', '#fav-list'].forEach(function (sel) {
+      $(sel).addEventListener('click', function (e) {
+        var t = closestAttr(e.target, 'data-open-id');
+        if (!t) return;
+        navigate('result', { id: t.getAttribute('data-open-id') });
+      });
+    });
+    ['pointerdown', 'touchstart', 'mousedown'].forEach(function (ev) {
+      document.addEventListener(ev, function (e) {
+        var t = closestPress(e.target);
+        if (t) t.classList.add('is-pressed');
+      }, { passive: true });
+    });
+    ['pointerup', 'pointercancel', 'touchend', 'touchcancel', 'mouseup', 'blur'].forEach(function (ev) {
+      window.addEventListener(ev, clearPressed);
+    });
+  }
+
+  // ===== 12. 分类关键词引导：分类名取自 categories.json 白名单，关键词取自各卡 keywords =====
+  function keywordBtn(word) {
+    var b = el('button', 'kw', word);
+    b.type = 'button';
+    b.setAttribute('data-press', '');
+    b.setAttribute('data-keyword', word);   // 委托给 #guide-groups 统一处理
+    return b;
+  }
+  function renderGuide() {
+    var tabs = $('#guide-tabs'); clear(tabs);
+    var groups = (Array.isArray(guideData) ? guideData : []).filter(function (g) {
+      return g && has(g.name) && Array.isArray(g.hints) && g.hints.length;
+    });
+    if (!groups.length) { $('#guide-groups').hidden = true; return; }
+    if (!state.guideKey || !groups.some(function (g) { return g.key === state.guideKey; }))
+      state.guideKey = groups[0].key;
+    groups.forEach(function (g) {
+      var b = el('button', 'guide-tab'), on = g.key === state.guideKey;
+      b.type = 'button';
+      b.setAttribute('data-press', '');
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+      setClass(b, 'is-active', on);
+      b.appendChild(el('span', null, g.name));
+      if (g.count) b.appendChild(el('small', null, String(g.count)));
+      b.setAttribute('data-tab-key', g.key);   // 委托给 #guide-tabs 统一处理
+      tabs.appendChild(b);
+    });
+    var box = $('#guide-groups'); clear(box);
+    groups.forEach(function (g) {
+      if (g.key !== state.guideKey) return;
+      var sec = el('div', 'guide-group'), row = el('div', 'guide-group__row');
+      g.hints.forEach(function (w) { if (has(w)) row.appendChild(keywordBtn(w)); });
+      if (!row.childNodes.length) return;
+      sec.appendChild(row);
+      box.appendChild(sec);
+    });
+  }
+  function renderBrowse() {
+    var box = $('#browse-groups'); clear(box);
+    var groups = (Array.isArray(guideData) ? guideData : []);
+    var n = $('#browse-count');
+    if (n) n.textContent = state.cards.length + ' 个主题 · ' + groups.length + ' 类';
+    groups.forEach(function (g) {
+      if (!g || !has(g.name)) return;
+      var list = state.cards.filter(function (c) { return c.category === g.key; });
+      if (!list.length) return;
+      var sec = el('div', 'browse__group');
+      sec.appendChild(el('p', 'browse__cat', g.name + '（' + list.length + '）'));
+      var wrap = el('div', 'chips');
+      list.forEach(function (c) { wrap.appendChild(chip(c)); });
+      sec.appendChild(wrap);
+      box.appendChild(sec);
+    });
+  }
+
+  // ===== 13. 同步启动：数据已在页面内，零 fetch、零异步、零外部依赖 =====
+  function renderQuick() {
+    var box = $('#quick-list'); clear(box);
+    state.cards.slice(0, QUICK_COUNT).forEach(function (c) { box.appendChild(chip(c)); });
+  }
+  function boot() {
+    state.cards = (Array.isArray(cardsData) ? cardsData : []).filter(function (c) {
+      return c && c.status === 'reviewed' && has(c.scene);
+    });
+    state.todo = loadIds(KEY_TODO);
+    state.fav = loadIds(KEY_FAV);
+    if (!state.cards.length) {
+      var n = $('#app-state');
+      n.hidden = false; clear(n);
+      n.appendChild(el('div', 'notice', '知识库为空，无法展示内容'));
+      return;
+    }
+    $('#app-state').hidden = true;
+    renderGuide();
+    renderBrowse();
+    renderQuick();
+    updateBadges();
+    bindEvents();
+    navigate('home');
+  }
+  boot();
+})();
+</script>
+</body>
+</html>
